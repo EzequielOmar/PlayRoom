@@ -1,0 +1,22 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    <h2 class="inactive underlineHover" (click)=goToLogin()> Entrar </h2>
+    <h2 class="active" > Registrarse </h2>
+    <!-- Icon -->
+    <div class="fadeIn first">
+    </div>
+    <!-- Login Form -->
+    <div>
+      <input type="text" #mail class="fadeIn second" name="login" placeholder="correo">
+      <input type="text" #pass class="fadeIn third" name="login" placeholder="clave">
+      <input type="submit" class="fadeIn fourth" value="Registrarse" (click)=signUp()>
+    </div>
+
+    <!--google auth-->
+    <div>
+      <input type="button" value="Registrarse con gooogle" (click)=signUpGoogle()>
+    </div>
+
+  </div>
+</div>
