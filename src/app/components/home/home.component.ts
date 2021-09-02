@@ -22,7 +22,10 @@ export class HomeComponent implements OnInit {
   signOut() {
     this.auth.SignOut();
     this.router.navigate(['login']);
+  }
 
+  goToAbout(){
+    this.router.navigate(['about']);
   }
 
 }
