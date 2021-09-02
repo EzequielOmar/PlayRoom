@@ -11,10 +11,8 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent implements OnInit {
   login: User = { mail: '', username: '', pass: '' };
-  passCheck: string;
   submitted = false;
   constructor(private auth: AuthService, private router: Router) {
-    this.passCheck = '';
     this.auth.userData.subscribe((user) => {
       //logueado, redirecciona a home
       if (user) this.router.navigate(['/']);

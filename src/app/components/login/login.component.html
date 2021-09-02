@@ -3,35 +3,35 @@
     <!-- Tabs Titles -->
     <h2 class="active "> Entrar </h2>
     <h2 class="inactive underlineHover" (click)=goToSignup()> Registrarse </h2>
-    <!-- Icon -->
-    <div class="fadeIn first">
-    </div>
     <!-- Login Form -->
     <form #logginForm="ngForm" (ngSubmit)="signIn(logginForm)">
+
       <span *ngIf="mail.errors?.required && submitted">
-        Name is required.
+        Por favor, ingrese el Email.
       </span>
-      <input required name="mail" [(ngModel)]="login.mail" #mail="ngModel" type="text" class="fadeIn second"
+      <input required name="mail" [(ngModel)]="login.mail" #mail="ngModel" type="email" class="fadeIn first"
         placeholder="correo">
+
       <span *ngIf="pass.errors?.required && submitted">
-        Name is required.
+        Por favor, ingrese la contraseña.
       </span>
-      <input required name="pass" [(ngModel)]="login.pass" #pass="ngModel" type="text" class="fadeIn third"
+      <input required name="pass" [(ngModel)]="login.pass" #pass="ngModel" type="password" class="fadeIn second"
         placeholder="clave">
-      <input type="submit" class="fadeIn fourth" value="Entrar">
+
+      <input type="submit" class="fadeIn third" value="Entrar">
+
     </form>
 
     <!--llenar datos usuario publico-->
     <a (click)="fillForm(logginForm)">Llenar formulario</a>
 
-    <!-- Remind Passowrd -->
+    <!-- Remind Password -->
     <div id="formFooter">
       <a class="underlineHover" href="#">¿Olvidaste la constraseña?</a>
-    </div>
-
-    <!--google auth-->
-    <div>
-      <input type="button" value="entra con gooogle" (click)=signUpGoogle()>
+      <!--google auth-->
+      <div>
+        <input type="button" value="entra con gooogle" (click)=signUpGoogle()>
+      </div>
     </div>
 
   </div>
