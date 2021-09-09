@@ -1,33 +1,41 @@
 <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
-    <h2 class="inactive underlineHover" (click)=goToLogin()> Entrar </h2>
-    <h2 class="active"> Registrarse </h2>
+    <h2 class="inactive underlineHover" (click)=goToLogin()> Entrá </h2>
+    <h2 class="active"> Registráte </h2>
+
+    <div *ngIf="spinner">
+      <img src="assets/spinner.svg" alt="spinner">
+    </div>
+    <div *ngIf="error">
+      {{error}}
+    </div>
+
     <!-- Signup Form -->
     <form #signupForm="ngForm" (ngSubmit)="signUp(signupForm)">
 
-      <span *ngIf="mail.errors?.required && submitted">
-        Por favor, ingrese el Email.
+      <span *ngIf="email.errors?.required && submitted">
+        Por favor, ingrese el Correo Electrónico.
       </span>
-      <input required [(ngModel)]="signup.mail" #mail="ngModel" name="mail" type="email" placeholder="correo"
+      <input required [(ngModel)]="signup.email" #email="ngModel" name="email" type="email" placeholder="correo"
         class="fadeIn first">
 
       <input [(ngModel)]="signup.username" #username="ngModel" name="username" type="text"
-        placeholder="nombre de usuario" class="fadeIn first">
+        placeholder="Nombre de usuario" class="fadeIn first">
 
-      <span *ngIf="pass.errors?.required && submitted">
-        Por favor, ingrese la Contraseña.
+      <span *ngIf="password.errors?.required && submitted">
+        Por favor, ingrese una contraseña.
       </span>
-      <span *ngIf="pass.errors?.minlength && submitted">
+      <span *ngIf="password.errors?.minlength && submitted">
         La contraseña es demasiado corta.
       </span>
-      <input required [(ngModel)]="signup.pass" #pass="ngModel" required minlength="6" name="pass" type="password"
-        placeholder="clave" class="fadeIn second">
+      <input required [(ngModel)]="pass" #password="ngModel" required minlength="6" name="pass" type="password"
+        placeholder="Contraseña" class="fadeIn second">
 
-      <span *ngIf="passCheck !== signup.pass && submitted || passCheck == '' && submitted">
+      <span *ngIf="passCheck !== password.value && submitted || passCheck == '' && submitted">
         Las contraseñas no coinciden.
       </span>
-      <input [(ngModel)]="passCheck" required name="passCheck" type="password" placeholder="repetir clave"
+      <input [(ngModel)]="passCheck" required name="passCheck" type="password" placeholder="Repetir Contraseña"
         class="fadeIn third">
 
       <input type="submit" class="fadeIn fourth" value="Registrarse">
@@ -37,27 +45,9 @@
     <div id="formFooter">
       <!--google auth-->
       <div>
-        <input type="button" value="Registrarse con gooogle">
+        <input (click)="signUpWithGoogle()" type="button" value="Registrarse con gooogle">
       </div>
     </div>
 
   </div>
 </div>
-
-
-<!--
-
-      <form #logginForm="ngForm" (ngSubmit)="signIn(logginForm)">
-      <span *ngIf="mail.errors?.required && submitted">
-        Name is required.
-      </span>
-      <input required name="mail" [(ngModel)]="login.mail" #mail="ngModel" type="text" class="fadeIn second"
-        placeholder="correo">
-      <span *ngIf="pass.errors?.required && submitted">
-        Name is required.
-      </span>
-      <input required name="pass" [(ngModel)]="login.pass" #pass="ngModel" type="text" class="fadeIn third"
-        placeholder="clave">
-      <input type="submit" class="fadeIn fourth" value="Entrar">
-    </form>
--->

@@ -1,12 +1,11 @@
-
 export const environment = {
-   production: true,
-   firebase: {
-    apiKey: "undefined",
-    authDomain: undefined,
-    databaseURL: undefined,
-    projectId: undefined,
-    storageBucket: undefined,
-    messagingSenderId: undefined
-  }
+  production: true,
+  firebase: {
+    apiKey: 'AIzaSyBYxKclwi0J58faquxSCFKJJpMueoSCTLI',
+    authDomain: 'saladejuegos-vazquez.firebaseapp.com',
+    databaseURL: 'https://saladejuegos-vazquez.firebaseio.co',
+    projectId: 'saladejuegos-vazquez',
+    storageBucket: 'saladejuegos-vazquez.appspot.com',
+    messagingSenderId: '448601497191',
+  },
 };

@@ -1,29 +1,40 @@
 <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
-    <h2 class="active "> Entrar </h2>
-    <h2 class="inactive underlineHover" (click)=goToSignup()> Registrarse </h2>
-    <!-- Login Form -->
-    <form #logginForm="ngForm" (ngSubmit)="signIn(logginForm)">
+    <h2 class="active "> Entrá </h2>
+    <h2 class="inactive underlineHover" (click)=goToSignup()> Registráte </h2>
 
-      <span *ngIf="mail.errors?.required && submitted">
-        Por favor, ingrese el Email.
+    <div *ngIf="spinner">
+      <img src="assets/spinner.svg" alt="spinner">
+    </div>
+    <div *ngIf="error">
+      {{error}}
+    </div>
+
+    <!-- Login Form -->
+    <form #logginForm="ngForm" *ngIf="!spinner" (ngSubmit)="logIn(logginForm)">
+
+      <span *ngIf="email.errors?.required && submitted">
+        Por favor, ingrese el corréo electrónico.
       </span>
-      <input required name="mail" [(ngModel)]="login.mail" #mail="ngModel" type="email" class="fadeIn first"
+      <input required name="email" [(ngModel)]="login.email" #email="ngModel" type="email" class="fadeIn first"
         placeholder="correo">
 
-      <span *ngIf="pass.errors?.required && submitted">
-        Por favor, ingrese la contraseña.
+      <span *ngIf="password.errors?.required && submitted">
+        Por favor, ingrese su contraseña.
       </span>
-      <input required name="pass" [(ngModel)]="login.pass" #pass="ngModel" type="password" class="fadeIn second"
-        placeholder="clave">
+      <span *ngIf="password.errors?.minlength && submitted">
+        La constraseña ingresada es muy corta.
+      </span>
+      <input required name="pass" [(ngModel)]="pass" #password="ngModel" type="password" class="fadeIn second"
+        placeholder="clave" minlength=6>
 
       <input type="submit" class="fadeIn third" value="Entrar">
 
-    </form>
 
-    <!--llenar datos usuario publico-->
-    <a (click)="fillForm(logginForm)">Llenar formulario</a>
+      <!--llenar datos usuario publico-->
+      <a (click)="fillForm()">Entrá como invitado</a>
+    </form>
 
     <!-- Remind Password -->
     <div id="formFooter">

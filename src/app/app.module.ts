@@ -13,6 +13,7 @@ import { AboutMeComponent } from './components/about-me/about-me.component';
 import { HomeComponent } from './components/home/home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { NavComponent } from './components/nav/nav.component';
+import { ErrorComponent } from './components/error/error.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { NavComponent } from './components/nav/nav.component';
     AboutMeComponent,
     HomeComponent,
     SignupComponent,
-    NavComponent
+    NavComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

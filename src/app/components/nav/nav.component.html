@@ -1,3 +1,10 @@
-<h2>
-  Logo
-</h2>
+<header class="masthead mb-auto">
+  <div class="inner">
+    <h3 class="masthead-brand">Sala de Juegos</h3>
+    <nav class="nav nav-masthead justify-content-center">
+      <a class="nav-link active" (click)=goHome()>Home</a>
+      <a class="nav-link" (click)=goToAbout()>¿Quién Soy?</a>
+      <a *ngIf="user.email" class="nav-link" (click)=signOut()>Salir</a>
+    </nav>
+  </div>
+</header>
