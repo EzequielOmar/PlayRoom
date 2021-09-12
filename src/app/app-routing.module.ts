@@ -4,7 +4,6 @@ import {
   AngularFireAuthGuard,
   redirectUnauthorizedTo,
 } from '@angular/fire/compat/auth-guard';
-import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { AboutMeComponent } from './components/about-me/about-me.component';
 import { HomeComponent } from './components/home/home.component';

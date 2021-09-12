@@ -1,10 +1,16 @@
 <header class="masthead mb-auto">
   <div class="inner">
+    <a (click)="toggleMenu()"><mat-icon #menuIcon aria-hidden="false" aria-label="menu icon">expand_more</mat-icon></a>
     <h3 class="masthead-brand">Sala de Juegos</h3>
     <nav class="nav nav-masthead justify-content-center">
       <a class="nav-link active" (click)=goHome()>Home</a>
       <a class="nav-link" (click)=goToAbout()>¿Quién Soy?</a>
-      <a *ngIf="user.email" class="nav-link" (click)=signOut()>Salir</a>
+      <a class="nav-link" (click)=signOut()>
+        <mat-icon aria-hidden="false" aria-label="logout icon">logout</mat-icon>
+      </a>
+      <a class="nav-link" (click)=signOut()>
+        <mat-icon aria-hidden="false" aria-label="account icon">account_circle</mat-icon>
+      </a>
     </nav>
   </div>
 </header>

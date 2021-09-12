@@ -26,7 +26,7 @@ a:hover {
   div {
     nav {
       a {
-        padding: .5rem 1rem;
+        padding: 0.5rem 1rem;
       }
     }
     background-color: rgba(0, 0, 0, 0.501);
@@ -74,4 +74,8 @@ a:hover {
   .nav-masthead {
     float: right;
   }
+}
+
+mat-icon {
+  color: #fff;
 }

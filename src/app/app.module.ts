@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AngularFireModule } from '@angular/fire/compat';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+//material
+import { MaterialModule } from './material.module';
 //environments vars
 import { environment } from '../environments/environment';
 //router
@@ -14,6 +16,7 @@ import { HomeComponent } from './components/home/home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { NavComponent } from './components/nav/nav.component';
 import { ErrorComponent } from './components/error/error.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -27,10 +30,12 @@ import { ErrorComponent } from './components/error/error.component';
   ],
   imports: [
     BrowserModule,
+    MaterialModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
