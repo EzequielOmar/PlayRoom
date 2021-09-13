@@ -9,9 +9,9 @@ import { AboutMeComponent } from './components/about-me/about-me.component';
 import { HomeComponent } from './components/home/home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ErrorComponent } from './components/error/error.component';
-import { LobbyComponent } from './components/home/sala/lobby/lobby.component';
-import { AhorcadoComponent } from './components/home/sala/ahorcado/ahorcado.component';
-import { MayoromenorComponent } from './components/home/sala/mayoromenor/mayoromenor.component';
+import { LobbyComponent } from './components/home/lobby/lobby.component';
+import { AhorcadoComponent } from './components/home/ahorcado/ahorcado.component';
+import { MayoromenorComponent } from './components/home/mayoromenor/mayoromenor.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
