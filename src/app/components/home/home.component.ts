@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { userDb } from 'src/app/interfaces/user';
+import { Component, ViewChild } from '@angular/core';
 import { ListenMenuService } from 'src/app/services/menu/listen-menu.service';
 
 @Component({
