@@ -55,11 +55,37 @@ export class SignupComponent implements OnInit {
   }
 
   signUpWithGoogle() {
-    this.submitted = true;
     this.auth
       .signUpWithGoogle()
       .then((res) => {
+        if (!this.dbUsers.exists(res.user?.uid ?? '')) {
+          this.dbUsers.saveNewUserEmailPass(
+            res.user?.uid ?? '',
+            res.user?.email ?? '',
+            res.user?.displayName ?? ''
+          );
+        }
         this.dbUsers.saveLoginGoogle(res.user?.uid ?? '');
+        this.router.navigate(['/']);
+      })
+      .catch((error) => (this.error = error))
+      .finally(() => {
+        this.spinner = false;
+      });
+  }
+
+  signUpWithTwitter() {
+    this.auth
+      .signUpWithTwitter()
+      .then((res) => {
+        if (!this.dbUsers.exists(res.user?.uid ?? '')) {
+          this.dbUsers.saveNewUserTwitter(
+            res.user?.uid ?? '',
+            res.user?.email ?? '',
+            res.user?.displayName ?? ''
+          );
+        }
+        this.dbUsers.saveLoginTwitter(res.user?.uid ?? '');
         this.router.navigate(['/']);
       })
       .catch((error) => (this.error = error))

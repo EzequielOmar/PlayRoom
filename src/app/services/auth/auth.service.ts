@@ -120,6 +120,18 @@ export class AuthService {
     return await this.signUpWithProvider(provider);
   };
 
+  /*
+   * Abre la ventana encargada de elegir la cuenta de twitter para loguearse.
+   * @returns retorna el evento (contiene el usuario)
+   * o throw error con mensaje listo para mostrar
+   * res.credential.accessToken -> Google Acces Token
+   * res.user -> datos del usuario logueado
+   */
+  signUpWithTwitter = async () => {
+    const provider = new firebase.auth.TwitterAuthProvider();
+    return await this.signUpWithProvider(provider);
+  };
+
   private signUpWithProvider = async (provider: any) =>
     await this.angularFireAuth
       .signInWithPopup(provider)

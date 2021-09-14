@@ -13,7 +13,7 @@ export class UserDbService {
   constructor(private db: DbService) {}
 
   /**
-   * Guarda el nuevo usuario en la coleccion usuarios documento -> uid
+   * Guarda el nuevo usuario (creado con email y pass) en la coleccion usuarios documento -> uid
    * Guarda el evento de creacion de usuario en la coleccion logs documento nombre random.
    * @param uid user id
    * @param uemail user email
@@ -26,6 +26,41 @@ export class UserDbService {
     this.db.setWithId(databases.users, uid, this.user);
     this.log.datetime = new Date().toJSON();
     this.log.event = events.signUp;
+    this.log.uid = uid;
+    this.db.set(databases.logs, this.log);
+  }
+
+  /**
+   * Guarda el nuevo usuario (creado con google) en la coleccion usuarios documento -> uid
+   * Guarda el evento de creacion de usuario en la coleccion logs documento nombre random.
+   * @param uid user id
+   * @param uemail user email
+   * @param uname username
+   */
+  saveNewUserGoogle(uid: string, uemail: string, uname?: string) {
+    this.user.createdAt = new Date().toJSON();
+    this.user.email = uemail;
+    this.user.username = uname ?? '';
+    this.db.setWithId(databases.users, uid, this.user);
+    this.log.datetime = new Date().toJSON();
+    this.log.event = events.signUpGoogle;
+    this.log.uid = uid;
+    this.db.set(databases.logs, this.log);
+  }
+
+  /**
+   * Guarda el nuevo usuario (creado con twitter) en la coleccion logs documento nombre random.
+   * @param uid user id
+   * @param uemail user email
+   * @param uname username
+   */
+  saveNewUserTwitter(uid: string, uemail: string, uname?: string) {
+    this.user.createdAt = new Date().toJSON();
+    this.user.email = uemail;
+    this.user.username = uname ?? '';
+    this.db.setWithId(databases.users, uid, this.user);
+    this.log.datetime = new Date().toJSON();
+    this.log.event = events.signUpTwitter;
     this.log.uid = uid;
     this.db.set(databases.logs, this.log);
   }
@@ -72,5 +107,13 @@ export class UserDbService {
     this.log.event = events.logOut;
     this.log.uid = uid;
     this.db.set(databases.logs, this.log);
+  }
+
+  exists(uid: string) {
+    let res = false;
+    this.db.getDocOnce(databases.users, uid).then(() => {
+      res = true;
+    });
+    return res;
   }
 }

@@ -29,7 +29,7 @@
       <span *ngIf="password.errors?.minlength && submitted">
         La contraseña es demasiado corta.
       </span>
-      <input required [(ngModel)]="pass" #password="ngModel" required minlength="6" name="pass" type="password"
+      <input required [(ngModel)]="pass" #password="ngModel" required minlength="6" name="password" type="password"
         placeholder="Contraseña" class="fadeIn second">
 
       <span *ngIf="passCheck !== password.value && submitted || passCheck == '' && submitted">
@@ -45,7 +45,11 @@
     <div id="formFooter">
       <!--google auth-->
       <div>
-        <input (click)="signUpWithGoogle()" type="button" value="Registrarse con gooogle">
+        <input (click)="signUpWithGoogle()" type="button" value="Registrarse con Google">
+      </div>
+      <!--twitter auth-->
+      <div>
+        <input (click)="signUpWithTwitter()" type="button" value="Registrarse con Twitter">
       </div>
     </div>
 

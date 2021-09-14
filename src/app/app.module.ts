@@ -22,6 +22,7 @@ import { DbService } from './services/db/db.service';
 import { AuthService } from './services/auth/auth.service';
 import { ListenMenuService } from './services/menu/listen-menu.service';
 import { HomeModule } from './components/home/home.module';
+import { PassRecoveryComponent } from './components/pass-recovery/pass-recovery.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { HomeModule } from './components/home/home.module';
     SignupComponent,
     NavComponent,
     ErrorComponent,
+    PassRecoveryComponent
   ],
   imports: [
     BrowserModule,

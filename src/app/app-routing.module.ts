@@ -12,6 +12,7 @@ import { ErrorComponent } from './components/error/error.component';
 import { LobbyComponent } from './components/home/lobby/lobby.component';
 import { AhorcadoComponent } from './components/home/ahorcado/ahorcado.component';
 import { MayoromenorComponent } from './components/home/mayoromenor/mayoromenor.component';
+import { PassRecoveryComponent } from './components/pass-recovery/pass-recovery.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'signup',
     component: SignupComponent,
+  },
+  {
+    path: 'recovery',
+    component: PassRecoveryComponent,
   },
   {
     path: 'about',

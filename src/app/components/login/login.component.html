@@ -38,10 +38,14 @@
 
     <!-- Remind Password -->
     <div id="formFooter">
-      <a class="underlineHover" href="#" (click)=goToRecovery()>¿Olvidaste la constraseña?</a>
+      <a class="underlineHover" (click)=goToRecovery()>¿Olvidaste la constraseña?</a>
       <!--google auth-->
       <div>
         <input type="button" value="entra con gooogle" (click)=signUpGoogle()>
+      </div>
+      <!--twitter auth-->
+      <div>
+        <input (click)="signUpWithTwitter()" type="button" value="Registrarse con Twitter">
       </div>
     </div>
 
