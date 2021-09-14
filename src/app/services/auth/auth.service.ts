@@ -3,19 +3,30 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import firebase from 'firebase/compat/app';
 import { Validator } from './Validators';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  userData: Observable<firebase.User | null>;
+  private user: Observable<firebase.User | null>;
   constructor(private angularFireAuth: AngularFireAuth) {
-    this.userData = angularFireAuth.authState;
+    this.user = angularFireAuth.authState;
+  }
+
+  // Obtener el estado de autenticación
+  get authenticated(): boolean {
+    return this.user != null; // True ó False
+  }
+
+  // Obtener el observador del usuario actual
+  get currentUser(): Observable<firebase.User | null> {
+    return this.user;
   }
 
   /*
    * Recibe email y pass
    * Success -> loguea al usuario actualizando
-   * el estado de userData(Observable) y retorna respuesta (evento y usuario)
+   * el estado de user(Observable) y retorna respuesta (evento y usuario)
    * Error-> retorna el texto del error que corresponda listo
    * para imprimir en pantalla.
    * *Posibles errores de signInWithEmailAndPassword:*
@@ -42,7 +53,8 @@ export class AuthService {
   /*
    * Recibe email y pass
    * Success -> crea y loguea al nuevo usuario actualizando
-   * el estado de userData(Observable) y retorna respuesta (evento y usuario)
+   * el estado de user(Observable), guarda el username (si no es un string vacio) en el current user
+   * Envía el mail de verificación y retorna respuesta (evento y usuario)
    * Error-> retorna el texto del error que corresponda listo
    * para imprimir en pantalla.
    * *Posibles errores de createUserWithEmailAndPassword:*
@@ -53,27 +65,42 @@ export class AuthService {
    * @param email string email del usuario
    * @param password string password del usuario
    */
-  signUp = async (email: string, password: string) =>
+  signUp = async (email: string, password: string, username: string) =>
     await this.angularFireAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then((res) => res)
+      .createUserWithEmailAndPassword(Validator.email(email), password)
+      .then((res) => {
+        if (username != '') {
+          firebase.auth().currentUser?.updateProfile({
+            displayName: username,
+            //  photoURL: 'https://example.com/jane-q-user/profile.jpg',
+          });
+        }
+        firebase.auth().currentUser?.sendEmailVerification();
+        return res;
+      })
       .catch((error) => {
         if (error.code === 'auth/operation-not-allowed') {
           throw new Error(
             'Lo siento, hubo un error interno. Vuelva a intentarlo mas tarde.'
           );
         }
-        if (error.code === 'auth/email-already-in-use') {
-          throw new Error(
-            'El mail ingresado, ya pertenece a un usuario existente.'
-          );
-        }
-        throw new Error('Mal formato de datos.');
+        throw new Error('Datos incorrectos.');
       });
 
   /**
+   * Envía el mail para recuperar contraseña
+   * lanza error si el mail no corresponde a un usuario
+   * @param email user email
+   */
+  passRecovery = async (email: string) => {
+    this.angularFireAuth.sendPasswordResetEmail(email).catch(() => {
+      throw new Error('Email incorrecto.');
+    });
+  };
+
+  /**
    * Termina la sesion del usuario activo
-   * actualiza userData(Observable) = null
+   * actualiza user(Observable) = null
    */
   signOut = async () => {
     await this.angularFireAuth.signOut();

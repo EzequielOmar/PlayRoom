@@ -26,7 +26,7 @@
       <span *ngIf="password.errors?.minlength && submitted">
         La constraseña ingresada es muy corta.
       </span>
-      <input required name="pass" [(ngModel)]="pass" #password="ngModel" type="password" class="fadeIn second"
+      <input required name="password" [(ngModel)]="pass" #password="ngModel" type="password" class="fadeIn second"
         placeholder="clave" minlength=6>
 
       <input type="submit" class="fadeIn third" value="Entrar">
@@ -38,7 +38,7 @@
 
     <!-- Remind Password -->
     <div id="formFooter">
-      <a class="underlineHover" href="#">¿Olvidaste la constraseña?</a>
+      <a class="underlineHover" href="#" (click)=goToRecovery()>¿Olvidaste la constraseña?</a>
       <!--google auth-->
       <div>
         <input type="button" value="entra con gooogle" (click)=signUpGoogle()>

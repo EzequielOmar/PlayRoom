@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { userDb } from 'src/app/interfaces/user';
+import { I_UserDb } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { DbService } from 'src/app/services/db/db.service';
-import { databases } from 'src/app/services/db/const';
+import { UserDbService } from 'src/app/services/user/user-db.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,7 +11,7 @@ import { databases } from 'src/app/services/db/const';
   styleUrls: ['../login/login.component.scss'],
 })
 export class SignupComponent implements OnInit {
-  signup = userDb;
+  signup: I_UserDb = { email: '', username: '', createdAt: '' };
   submitted = false;
   spinner = false;
   pass: string;
@@ -22,7 +21,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private db: DbService
+    private dbUsers: UserDbService
   ) {
     this.pass = '';
     this.passCheck = '';
@@ -35,12 +34,18 @@ export class SignupComponent implements OnInit {
     if (form.valid && this.passCheck === this.pass) {
       this.spinner = true;
       this.auth
-        .signUp(form.form.value.email, form.form.value.password)
+        .signUp(
+          form.form.value.email,
+          form.form.value.password,
+          form.form.value.username
+        )
         .then((res) => {
-          if (res.user) {
-            this.saveNewUser(res.user.uid);
-            this.router.navigate(['/']);
-          }
+          this.dbUsers.saveNewUserEmailPass(
+            res.user?.uid ?? '',
+            res.user?.email ?? '',
+            form.form.value.username ?? ''
+          );
+          this.router.navigate(['/']);
         })
         .catch((error) => (this.error = error))
         .finally(() => {
@@ -54,10 +59,7 @@ export class SignupComponent implements OnInit {
     this.auth
       .signUpWithGoogle()
       .then((res) => {
-        if (res.user?.email) {
-          this.signup.email = res.user.email;
-          this.saveNewUser(res.user.uid);
-        }
+        this.dbUsers.saveLoginGoogle(res.user?.uid ?? '');
         this.router.navigate(['/']);
       })
       .catch((error) => (this.error = error))
@@ -68,10 +70,5 @@ export class SignupComponent implements OnInit {
 
   goToLogin() {
     this.router.navigate(['login']);
-  }
-
-  private saveNewUser(uid: string) {
-    this.signup.createdAt = new Date().toJSON();
-    this.db.setWithId(databases.users, uid, this.signup);
   }
 }

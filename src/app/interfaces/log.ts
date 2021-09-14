@@ -1,9 +1,13 @@
 export const events = {
-  LogIn: 1,
-  LogOut: 2,
+  signUp:'signup-Email/Pass',
+  logIn: 'login-Email/Pass',
+  logInGoogle: 'login-Google',
+  logInTwitter: 'login-Twitter',
+  logOut: 'logout',
 };
 
-export interface logDb {
-  event: number;
+export interface I_logDb {
+  uid:string;
+  event: string;
   datetime: string;
 }

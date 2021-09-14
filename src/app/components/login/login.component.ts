@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { userDb } from 'src/app/interfaces/user';
+import { I_UserDb } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { databases } from 'src/app/services/db/const';
-import { DbService } from 'src/app/services/db/db.service';
-import { logDb } from 'src/app/interfaces/log';
-import { events } from 'src/app/interfaces/log';
+import { UserDbService } from 'src/app/services/user/user-db.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +11,7 @@ import { events } from 'src/app/interfaces/log';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  login = userDb;
+  login: I_UserDb = { email: '', username: '', createdAt: '' };
   pass: string;
   submitted = false;
   spinner = false;
@@ -22,7 +19,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private db: DbService
+    private dbUsers: UserDbService
   ) {
     this.pass = '';
   }
@@ -37,14 +34,11 @@ export class LoginComponent implements OnInit {
         .signIn(form.form.value.email, form.form.value.password)
         .then((res) => {
           if (res.user?.uid) {
-            this.saveLog(res.user?.uid);
+            this.dbUsers.saveLoginEmailPass(res.user?.uid ?? '');
             this.router.navigate(['/']);
           }
         })
-        .catch((error) => {
-          console.log(error);
-          this.error = error;
-        })
+        .catch((error) => (this.error = error))
         .finally(() => {
           this.spinner = false;
         });
@@ -57,7 +51,7 @@ export class LoginComponent implements OnInit {
       .signUpWithGoogle()
       .then((res) => {
         if (res.user?.uid) {
-          this.saveLog(res.user?.uid);
+          this.dbUsers.saveLoginGoogle(res.user?.uid ?? '');
           this.router.navigate(['/']);
         }
       })
@@ -76,8 +70,8 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['signup']);
   }
 
-  private saveLog(uid: string) {
-    const log: logDb = { event: events.LogIn, datetime: new Date().toJSON() };
-    this.db.setWithId(databases.logs, uid, log);
+  goToRecovery(){
+    this.router.navigate(['recovery']);
   }
+
 }

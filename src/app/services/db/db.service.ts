@@ -1,8 +1,6 @@
-import { not } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  DocumentSnapshot,
 } from '@angular/fire/compat/firestore';
 
 @Injectable({

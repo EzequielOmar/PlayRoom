@@ -31,7 +31,7 @@ import { HomeModule } from './components/home/home.module';
     HomeComponent,
     SignupComponent,
     NavComponent,
-    ErrorComponent
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +41,7 @@ import { HomeModule } from './components/home/home.module';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     BrowserAnimationsModule,
-    HomeModule
+    HomeModule,
   ],
   exports: [],
   providers: [DbService, AuthService, ListenMenuService],
