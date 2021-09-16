@@ -15,7 +15,9 @@ export class ChatComponent implements OnInit {
   messages: any[] = [];
   error: string = '';
   constructor(private chatDb: ChatService) {
-    this.user = JSON.parse(localStorage.getItem('user') ?? '');
+    localStorage.getItem('user')
+      ? (this.user = JSON.parse(localStorage.getItem('user') ?? ''))
+      : (this.user = null);
   }
 
   ngOnInit(): void {
