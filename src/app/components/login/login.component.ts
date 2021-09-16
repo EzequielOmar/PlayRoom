@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { I_UserDb } from 'src/app/interfaces/user.interface';
+import { events } from 'src/app/interfaces/log.interface';
+import { I_UserDb, I_UserSession } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserDbService } from 'src/app/services/user/user-db.service';
 
@@ -33,10 +34,8 @@ export class LoginComponent implements OnInit {
       this.auth
         .signIn(form.form.value.email, form.form.value.password)
         .then((res) => {
-          if (res.user?.uid) {
-            this.dbUsers.saveLoginEmailPass(res.user?.uid ?? '');
-            this.router.navigate(['/']);
-          }
+          this.dbUsers.saveLogin(res.user?.uid ?? '', events.logIn);
+          this.saveSessionAndRedirect(res);
         })
         .catch((error) => (this.error = error))
         .finally(() => {
@@ -49,15 +48,9 @@ export class LoginComponent implements OnInit {
     this.auth
       .signUpWithGoogle()
       .then((res) => {
-        if (!this.dbUsers.exists(res.user?.uid ?? '')) {
-          this.dbUsers.saveNewUserEmailPass(
-            res.user?.uid ?? '',
-            res.user?.email ?? '',
-            res.user?.displayName ?? ''
-          );
-        }
-        this.dbUsers.saveLoginGoogle(res.user?.uid ?? '');
-        this.router.navigate(['/']);
+        this.saveNewUser(res, events.logInGoogle);
+        this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInTwitter);
+        this.saveSessionAndRedirect(res);
       })
       .catch((error) => (this.error = error))
       .finally(() => {
@@ -69,15 +62,9 @@ export class LoginComponent implements OnInit {
     this.auth
       .signUpWithTwitter()
       .then((res) => {
-        if (!this.dbUsers.exists(res.user?.uid ?? '')) {
-          this.dbUsers.saveNewUserTwitter(
-            res.user?.uid ?? '',
-            res.user?.email ?? '',
-            res.user?.displayName ?? ''
-          );
-        }
-        this.dbUsers.saveLoginTwitter(res.user?.uid ?? '');
-        this.router.navigate(['/']);
+        this.saveNewUser(res, events.logInGoogle);
+        this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInTwitter);
+        this.saveSessionAndRedirect(res);
       })
       .catch((error) => (this.error = error))
       .finally(() => {
@@ -96,5 +83,26 @@ export class LoginComponent implements OnInit {
 
   goToRecovery() {
     this.router.navigate(['recovery']);
+  }
+
+  private saveNewUser(res: any, event: string) {
+    if (!this.dbUsers.exists(res.user?.uid ?? '')) {
+      this.dbUsers.saveNewUser(
+        res.user?.uid ?? '',
+        res.user?.email ?? '',
+        res.user?.displayName ?? '',
+        event
+      );
+    }
+  }
+
+  private saveSessionAndRedirect(res: any) {
+    let user: I_UserSession = {
+      uid: res.user?.uid ?? '',
+      username: res.user?.displayName ?? '',
+      email: res.user?.email ?? '',
+    };
+    localStorage.setItem('user', JSON.stringify(user));
+    this.router.navigate(['/']);
   }
 }

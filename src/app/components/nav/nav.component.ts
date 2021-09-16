@@ -66,6 +66,7 @@ export class NavComponent implements OnInit, OnDestroy {
   signOut() {
     this.auth.signOut();
     this.dbUsers.saveLogout(this.uid);
+    localStorage.setItem('user',JSON.stringify(null));
     this.router.navigate(['login']);
   }
 

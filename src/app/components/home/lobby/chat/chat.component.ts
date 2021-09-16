@@ -1,32 +1,58 @@
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { I_UserSession } from 'src/app/interfaces/user.interface';
 import { ChatService } from 'src/app/services/chat/chat.service';
-import { databases } from 'src/app/services/db/const';
-import { DbService } from 'src/app/services/db/db.service';
-
-import { Observable } from 'rxjs';
+import { I_Message } from 'src/app/interfaces/message.interface';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit{
-  //sub: Observable<Message[]>;
-  messages: Message[] = [];
-  uid = '';
-  constructor(private chatDb: ChatService, private auth: AuthService) {
-    this.chatDb.getMessages();
+export class ChatComponent implements OnInit {
+  @ViewChild('scroll') private scrollContainer: ElementRef = {} as ElementRef;
+  @ViewChild('input') private input: ElementRef = {} as ElementRef;
+  user: I_UserSession | null;
+  messages: any[] = [];
+  error: string = '';
+  constructor(private chatDb: ChatService) {
+    this.user = JSON.parse(localStorage.getItem('user') ?? '');
   }
 
   ngOnInit(): void {
-    //this.sub.subscribe((data:Message) => {
-    //  this.messages.push(data;
-    //});
-    this.auth.currentUser.subscribe((u) => {
-      this.uid = u?.uid ?? '';
+    //limpia el array de mensaje y obtiene los ultimos 50
+    //cada vez que se carga un mensaje nuevo
+    //por ultimo scrollea el div
+    this.chatDb.getMessages().onSnapshot((snap) => {
+      this.messages = [];
+      snap.forEach((child: any) => {
+        this.messages.push(child.data());
+      });
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 500);
     });
+  }
+
+  send(input: string) {
+    this.input.nativeElement.value = '';
+    if (!this.user) {
+      this.error = 'Solo usuarios logueados pueden usar el chat';
+      return;
+    }
+    let message: I_Message = {
+      message: input,
+      uid: this.user?.uid ?? '',
+      datetime: new Date().toJSON(),
+    };
+    this.chatDb.newMessage(message);
+  }
+
+  private scrollToBottom(): void {
+    try {
+      this.scrollContainer.nativeElement.scrollTop =
+        this.scrollContainer?.nativeElement.scrollHeight;
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
