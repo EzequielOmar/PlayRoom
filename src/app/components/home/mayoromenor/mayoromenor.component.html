@@ -1,1 +1,23 @@
-<p>mayoromenor works!</p>
+<div class="mayoromenor">
+
+  <h2>Toque el mazo para iniciar el juego!</h2>
+  <span>Error: {{error}}</span>
+  <span>Score: {{points}}</span>
+  <span>Prev Card: {{prevCard}}</span>
+  <span>Curent Card: {{currentCard}}</span>
+
+  <div class="card" (click)="initGame()" [@cardFlip]="cardState">
+    <div class="face back">
+      back
+    </div>
+    <div class="face front">
+      front
+    </div>
+  </div>
+
+  <div class="buttons">
+    <input type="button" value="Mayor" (click)="try('mayor')">
+    <input type="button" value="Menor" (click)="try('menor')">
+  </div>
+
+</div>
