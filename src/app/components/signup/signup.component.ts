@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { I_UserDb } from 'src/app/interfaces/user';
+import { I_UserDb } from 'src/app/interfaces/user.interface'; 
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserDbService } from 'src/app/services/user/user-db.service';
 

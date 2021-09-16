@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DbService } from '../db/db.service';
 import { databases } from '../db/const';
-import { I_UserDb } from 'src/app/interfaces/user';
-import { events, I_logDb } from 'src/app/interfaces/log';
+import { I_UserDb } from 'src/app/interfaces/user.interface';
+import { events, I_logDb } from 'src/app/interfaces/log.interface';
 
 @Injectable({
   providedIn: 'root',

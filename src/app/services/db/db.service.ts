@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-} from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -153,4 +151,6 @@ export class DbService {
   getObserverDb(database: string) {
     return this.db.collection(database).valueChanges();
   }
+
+
 }

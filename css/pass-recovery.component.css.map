@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../src/app/components/pass-recovery/pass-recovery.component.scss"
+    ],
+    "names": [],
+    "file": "pass-recovery.component.css"
+}

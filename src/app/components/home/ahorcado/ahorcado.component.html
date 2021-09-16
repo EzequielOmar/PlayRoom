@@ -1,1 +1,19 @@
-<p>ahorcado works!</p>
+<div class="ahorcado">
+  <span class="game-end" *ngIf="missesLeft === 0">¡Tú Pierdes!</span>
+  <span class="error" *ngIf="error">{{error}}</span>
+  <h2>you have {{missesLeft}} chances to guess.</h2>
+  <div class="secret-word" *ngFor="let char of secretWord">
+    <div class="secret-word-letter-chosen" *ngIf="char.chosen">
+      {{char.name}}
+    </div>
+    <div class="secret-word-letter" *ngIf="!char.chosen">
+      _
+    </div>
+  </div>
+  <div class="letters" *ngFor="let char of letters">
+    <div [class.chosed]="char.chosen" class="letters-letter" (click)="try(char)">
+      {{char.name}}
+    </div>
+  </div>
+  <button (click)="reset()">Reiniciar</button>
+</div>
