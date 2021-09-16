@@ -55,8 +55,15 @@ export class SignupComponent implements OnInit {
     this.auth
       .signUpWithGoogle()
       .then((res) => {
-        this.saveNewUser(res, events.signUpGoogle);
-        this.dbUsers.saveLogin(res.user?.uid ?? '',events.logInGoogle);
+        if (
+          !this.saveNewUser(
+            res,
+            events.signUpGoogle,
+            res.user?.displayName ?? ''
+          )
+        ) {
+          this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInGoogle);
+        }
         this.saveSessionAndRedirect(res);
       })
       .catch((error) => (this.error = error))
@@ -69,8 +76,15 @@ export class SignupComponent implements OnInit {
     this.auth
       .signUpWithTwitter()
       .then((res) => {
-        this.saveNewUser(res, events.logInTwitter);
-        this.dbUsers.saveLogin(res.user?.uid ?? '',events.logInTwitter);
+        if (
+          !this.saveNewUser(
+            res,
+            events.logInTwitter,
+            res.user?.displayName ?? ''
+          )
+        ) {
+          this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInTwitter);
+        }
         this.saveSessionAndRedirect(res);
       })
       .catch((error) => (this.error = error))
@@ -83,7 +97,7 @@ export class SignupComponent implements OnInit {
     this.router.navigate(['login']);
   }
 
-  private saveNewUser(res: any, event: string, username?: string) {
+  private saveNewUser(res: any, event: string, username?: string): Boolean {
     if (!this.dbUsers.exists(res.user?.uid ?? '')) {
       this.dbUsers.saveNewUser(
         res.user?.uid ?? '',
@@ -91,7 +105,9 @@ export class SignupComponent implements OnInit {
         event,
         res.user?.displayName ?? username ?? ''
       );
+      return true;
     }
+    return false;
   }
 
   private saveSessionAndRedirect(res: any, username?: string) {

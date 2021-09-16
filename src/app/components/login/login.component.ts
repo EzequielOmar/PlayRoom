@@ -48,8 +48,15 @@ export class LoginComponent implements OnInit {
     this.auth
       .signUpWithGoogle()
       .then((res) => {
-        this.saveNewUser(res, events.logInGoogle);
-        this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInTwitter);
+        if (
+          !this.saveNewUser(
+            res,
+            events.logInGoogle,
+            res.user?.displayName ?? ''
+          )
+        ) {
+          this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInTwitter);
+        }
         this.saveSessionAndRedirect(res);
       })
       .catch((error) => (this.error = error))
@@ -62,8 +69,15 @@ export class LoginComponent implements OnInit {
     this.auth
       .signUpWithTwitter()
       .then((res) => {
-        this.saveNewUser(res, events.logInGoogle);
-        this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInTwitter);
+        if (
+          !this.saveNewUser(
+            res,
+            events.signUpTwitter,
+            res.user?.displayName ?? ''
+          )
+        ) {
+          this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInTwitter);
+        }
         this.saveSessionAndRedirect(res);
       })
       .catch((error) => (this.error = error))
@@ -85,21 +99,23 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['recovery']);
   }
 
-  private saveNewUser(res: any, event: string) {
+  private saveNewUser(res: any, event: string, username?: string): Boolean {
     if (!this.dbUsers.exists(res.user?.uid ?? '')) {
       this.dbUsers.saveNewUser(
         res.user?.uid ?? '',
         res.user?.email ?? '',
-        res.user?.displayName ?? '',
-        event
+        event,
+        res.user?.displayName ?? username ?? ''
       );
+      return true;
     }
+    return false;
   }
 
-  private saveSessionAndRedirect(res: any) {
+  private saveSessionAndRedirect(res: any, username?: string) {
     let user: I_UserSession = {
       uid: res.user?.uid ?? '',
-      username: res.user?.displayName ?? '',
+      username: res.user?.displayName ?? username ?? '',
       email: res.user?.email ?? '',
     };
     localStorage.setItem('user', JSON.stringify(user));
