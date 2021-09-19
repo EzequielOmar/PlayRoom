@@ -1,3 +1,113 @@
-.chosed{
+//contenedor de todo
+.board {
+  //juego con imagen
+  .ahorcado {
+    //imagen del ahorcado
+    .ahorcado-imagen {
+      img {
+        min-width: 75;
+      }
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      width: 30%;
+    }
+    //juego
+    .game {
+      .message,
+      .secret-word,
+      .letters {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
+      }
+      .secret-word {
+        margin: 1.5rem 0;
+      }
+      mat-icon {
+        font-size: xxx-large;
+        padding: 1rem 0;
+      }
+      width: 100%;
+      text-align: center;
+    }
+    display: flex;
+    align-items: center;
+    height: 300px;
+    width: 450px;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.secret-word-letter,
+.secret-word-letter-chosed,
+.letters-letter {
+  text-transform: uppercase;
+  padding: 0.2rem;
+}
+
+.letters-letter {
+  background: #c18e449c;
+  padding: 0.5rem;
+  border-radius: 11px;
+  margin: 0.15rem;
+  min-width: 32px;
+}
+
+.letters-letter:hover {
+  background-color: #c09f6cdb;
+}
+
+p,
+h2 {
+  margin: 0;
+  font-size: x-large;
+  font-weight: 500;
+}
+
+.chosed {
+  p {
+    color: red;
+  }
+  background-color: #43331adb;
+}
+
+.error {
   color: red;
+  font-size: large;
+}
+
+.succes {
+  color: #00d500;
+  font-size: large;
+}
+
+p,
+h2,
+span,
+mat-icon {
+  cursor: pointer;
+}
+
+@keyframes screem {
+  0% {
+    transform: translate(22px, 6px);
+  }
+  50% {
+    transform: translate(25px, 6px);
+  }
+  100%{
+    transform: translate(22px, 6px);
+  }
+}
+
+#pain {
+  animation-name: screem;
+  animation-duration: .5s;
+  animation-iteration-count: infinite;
 }

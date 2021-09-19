@@ -26,7 +26,7 @@ export const words = [
   'closure',
 ];
 
-export const missesAllowed = 3;
+export const missesAllowed = 5;
 
 //mayoromenor
 export const cards = [

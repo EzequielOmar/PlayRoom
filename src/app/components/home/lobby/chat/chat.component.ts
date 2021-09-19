@@ -45,6 +45,7 @@ export class ChatComponent implements OnInit {
       message: input,
       uid: this.user?.uid ?? '',
       datetime: new Date().toJSON(),
+      username: this.user.username,
     };
     this.chatDb.newMessage(message);
   }
