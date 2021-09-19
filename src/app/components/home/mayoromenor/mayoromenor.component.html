@@ -6,15 +6,17 @@
   <span>Prev Card: {{prevCard}}</span>
   <span>Curent Card: {{currentCard}}</span>
 
-  <div class="card" (click)="initGame()" [@cardFlip]="cardState">
-    <div class="face back">
-      back
+  <div class="card-container">
+    <div class="card" (click)="initGame()" [@cardFlip]="cardState">
+      <div class="face">
+        <img *ngIf="!playing" src="assets/back-poker-card.png" alt="poker back card">
+        <img *ngIf="playing && cardState ==='default'" [src]= "cardImage" alt="poker card">
+      </div>
+      <div class="face front">
+      </div>
     </div>
-    <div class="face front">
-      front
-    </div>
-  </div>
 
+  </div>
   <div class="buttons">
     <input type="button" value="Mayor" (click)="try('mayor')">
     <input type="button" value="Menor" (click)="try('menor')">

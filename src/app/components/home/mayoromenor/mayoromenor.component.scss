@@ -3,32 +3,53 @@
   perspective: 600px;
 }
 
-.card {
-  box-shadow: 10px 10px 43px -18px rgba(0, 0, 0, 0.75);
-  border-radius: 5px;
-  height: 300px;
-  width: 200px;
-  cursor: pointer;
-  position: relative;
-  transform-style: preserve-3d;
-}
-
-.face {
-  display: block;
-  position: absolute;
+.mayoromenor {
+  .card-container {
+    .card {
+      .face {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        > img {
+          width: 100%;
+          height: 102%;
+          object-fit: cover;
+          border-radius: inherit;
+        }
+        h2 {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          font-size: xx-large;
+          color: black;
+        }
+      }
+      .front {
+        transform: rotateY(180deg);
+      }
+      box-shadow: 10px 10px 43px -18px rgba(0, 0, 0, 0.75);
+      border-radius: 5px;
+      height: 300px;
+      width: 200px;
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+    width: 100%;
+    justify-content: center;
+    display: flex;
+  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
   width: 100%;
   height: 100%;
-  border-radius: inherit;
-  backface-visibility: hidden;
-
-  > img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: inherit;
-  }
-}
-
-.front {
-  transform: rotateY(180deg);
 }

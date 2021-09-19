@@ -74,6 +74,10 @@ export class MayoromenorComponent implements OnInit {
     }
   }
 
+  get cardImage(): string {
+    return `assets/cards/${this.currentCard}.png`;
+  }
+
   private getCard(): number {
     let index = Math.floor(Math.random() * cards.length);
     return cards[index];
