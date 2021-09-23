@@ -1,0 +1,170 @@
+// Small devices
+@mixin sm {
+  @media (max-width: 456px) {
+    @content;
+  }
+}
+
+%border {
+  background: #281616ab;
+  border-radius: 100px 25px 100px 25px/ 5px 15px 5px 15px;
+  border: 3px double #b6fffcc9;
+}
+
+.logo {
+  div {
+    img {
+      width: 25%;
+      min-width: 200px;
+      animation-name: beat;
+      animation-duration: 2s;
+      cursor: pointer;
+    }
+    width: 100%;
+  }
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  align-items: center;
+}
+
+.playAgain {
+  mat-icon{
+    font-size: xx-large;
+    margin: 1rem;
+  }
+  position: absolute;
+  top: 5%;
+  left: 45%;
+  width: 40%;
+  min-width: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.preguntados {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.score {
+  ul {
+    li {
+      transform: rotate(-180deg);
+      padding: 0.2rem 0;
+    }
+    li ~ li {
+      border-bottom: 1px solid #000000ba;
+    }
+    @extend %border;
+    transform: rotate(180deg);
+    width: 30vw;
+    max-width: 220px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  text-align: center;
+  font-size: 1.1rem;
+  position: absolute;
+  top: 5%;
+  right: 60%;
+}
+
+.earned {
+  background: #000000a6;
+  border-radius: 20px;
+  color: #8c8c72;
+}
+.current {
+  background: #dea53dba;
+  border-radius: 20px;
+}
+
+.pregunta {
+  //aca van 5 .box clases con la pregunta
+  mat-icon {
+    width: 70%;
+    text-align: end;
+    font-size: xxx-large;
+    height: auto;
+    cursor: pointer;
+    color: #94cecb;
+  }
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+//borde con pregunta y respuestas
+.box {
+  @extend %border;
+  padding: 1rem 4rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: 0.25rem;
+  @include sm {
+    width: 80% !important;
+  }
+  strong {
+    align-self: flex-start;
+  }
+  p {
+    text-indent: 1rem;
+    margin: 0;
+  }
+}
+.box ~ .box {
+  padding: 0.5rem 1rem;
+}
+.box ~ .box:hover {
+  background: #cea458c4;
+}
+
+.error {
+  background: #9f0d0d;
+}
+
+.success {
+  background: #078407d1;
+}
+
+@keyframes beat {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.fill {
+  color: #fffafc;
+  background: none;
+  border: 2px solid;
+  line-height: 1;
+  padding: 1em 2em;
+}
+.fill:hover,
+.fill:focus {
+  box-shadow: inset 0 0 0 2em var(adjust-hue(#a972cb, 45deg));
+  background: #a972cb;
+  transition: 2s;
+}

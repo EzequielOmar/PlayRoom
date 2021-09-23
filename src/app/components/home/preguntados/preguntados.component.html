@@ -1,0 +1,51 @@
+<div class="preguntados">
+
+  <div *ngIf="error">{{error}}</div>
+
+
+  <div *ngIf="!playing" class="logo">
+    <div>
+      <img src="/assets/wwtbami-logo.svg" alt="logo">
+    </div>
+    <div>
+      <button *ngIf="ready" (click)="startGame()" class="fill">Comenzar</button>
+    </div>
+  </div>
+
+  <div class="playAgain">
+    <div *ngIf="playing && (win||lost)">
+      <h3 *ngIf="win">¡Felicitaciones! Ganaste el acumulado.</h3>
+      <h3 *ngIf="lost">¡Incorrecto! El juego terminó.</h3>
+      <span>¿Quieres intentarlo de nuevo?</span>
+      <div>
+        <mat-icon (click)="startGame()" aria-hidden="false" aria-label="restart_alt icon">next_plan</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="playing" class="score">
+    <ul>
+      <li [ngClass]="{'earned' : s.earned,'current' : s.current}" *ngFor="let s of scores">
+        {{s.score}}
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="currentQuestion && playing" class="pregunta">
+    <mat-icon *ngIf="guess && !win && !lost" (click)="next()" aria-hidden="false" aria-label="restart_alt icon">
+      next_plan</mat-icon>
+    <!--Pregunta-->
+    <div class="box" style="max-width:80%">
+      <strong>Pregunta:</strong>
+      <p>{{currentQuestion.question}}</p>
+    </div>
+    <!--Opciones-->
+    <div (click)="try(option)" class="box question" style="width:39%"
+      *ngFor="let option of currentQuestion.incorrect_answers;let i = index" >
+      <strong>{{options[i]}}:</strong>
+      <p>{{option}}</p>
+    </div>
+
+  </div>
+
+</div>

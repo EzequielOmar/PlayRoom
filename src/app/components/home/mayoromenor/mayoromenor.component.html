@@ -9,7 +9,7 @@
   <div class="card-container">
     <div class="card" (click)="initGame()" [@cardFlip]="cardState">
       <div class="face">
-        <img *ngIf="!playing" src="assets/back-poker-card.png" alt="poker back card">
+        <img *ngIf="!playing" src="assets/cards/back-poker-card.png" alt="poker back card">
         <img *ngIf="playing && cardState ==='default'" [src]= "cardImage" alt="poker card">
       </div>
       <div class="face front">

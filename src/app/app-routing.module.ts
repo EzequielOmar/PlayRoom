@@ -13,6 +13,7 @@ import { LobbyComponent } from './components/home/lobby/lobby.component';
 import { AhorcadoComponent } from './components/home/ahorcado/ahorcado.component';
 import { MayoromenorComponent } from './components/home/mayoromenor/mayoromenor.component';
 import { PassRecoveryComponent } from './components/pass-recovery/pass-recovery.component';
+import { PreguntadosComponent } from './components/home/preguntados/preguntados.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -36,6 +37,11 @@ const routes: Routes = [
       {
         path: 'mayoromenor',
         component: MayoromenorComponent,
+        outlet: 'menuList',
+      },
+      {
+        path: 'preguntados',
+        component: PreguntadosComponent,
         outlet: 'menuList',
       },
     ],
