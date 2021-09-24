@@ -1,0 +1,11 @@
+<div ng-controller="myCtrl" class="game">
+
+  <div *ngIf="soup" class="soup" #soupContainer>
+    <div class="row" *ngFor="let row of soup;let i = index">
+      <div #cell draggable="true" (dragover)="drag(i,j)"  (dragend)="drop()"  class="cell" *ngFor="let cell of row;let j = index">
+        <span>{{cell}}</span>
+      </div>
+    </div>
+  </div>
+
+</div>

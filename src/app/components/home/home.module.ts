@@ -7,6 +7,7 @@ import { ChatComponent } from './lobby/chat/chat.component';
 import { MaterialModule } from 'src/app/material.module';
 import { PreguntadosComponent } from './preguntados/preguntados.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SopadeletrasComponent } from './sopadeletras/sopadeletras.component';
 
 @NgModule({
   imports: [CommonModule, MaterialModule, HttpClientModule],
@@ -16,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
     LobbyComponent,
     ChatComponent,
     PreguntadosComponent,
+    SopadeletrasComponent,
   ],
 })
 export class HomeModule {}

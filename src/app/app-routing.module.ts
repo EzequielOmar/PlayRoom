@@ -14,6 +14,7 @@ import { AhorcadoComponent } from './components/home/ahorcado/ahorcado.component
 import { MayoromenorComponent } from './components/home/mayoromenor/mayoromenor.component';
 import { PassRecoveryComponent } from './components/pass-recovery/pass-recovery.component';
 import { PreguntadosComponent } from './components/home/preguntados/preguntados.component';
+import { SopadeletrasComponent } from './components/home/sopadeletras/sopadeletras.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -42,6 +43,11 @@ const routes: Routes = [
       {
         path: 'preguntados',
         component: PreguntadosComponent,
+        outlet: 'menuList',
+      },
+      {
+        path: 'sopadeletras',
+        component: SopadeletrasComponent,
         outlet: 'menuList',
       },
     ],
