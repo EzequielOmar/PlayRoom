@@ -112,7 +112,6 @@ export class PreguntadosComponent implements OnInit {
     }
     //options
     let $divs = Array.from(document.getElementsByClassName('question'));
-    //console.log($divs[0].lastElementChild?.innerHTML);
     $divs.forEach((d) => {
       if (
         d.lastElementChild?.innerHTML === this.currentQuestion?.correct_answer

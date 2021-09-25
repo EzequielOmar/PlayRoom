@@ -20,15 +20,44 @@ export class SopadeletrasComponent implements OnInit {
   guessedWords: Array<string> = [];
   dragElements: Array<ElementRef<any>> = [];
   dragWord: string = '';
-
+  win: Boolean = false;
+  lost: Boolean = false;
+  ready: Boolean = false;
+  playing: Boolean = false;
   constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
     this.soup = this.getSoup();
   }
 
+  startGame() {
+    if (this.win || this.lost) {
+      this.initialice();
+      this.soup = this.getSoup();
+    }
+    setTimeout(() => {
+      this.playing = true;
+    }, 500);
+  }
+
+  private initialice() {
+    this.soup = null;
+    this.words = [];
+    this.guessedWords = [];
+    this.dragElements = [];
+    this.dragWord = '';
+    this.win = false;
+    this.lost = false;
+    this.ready = false;
+    this.playing = false;
+  }
+
+  /**
+   * Carga el array dragElements con los divs correspondientes a las letras seleccionadas
+   * @param i fila
+   * @param j columna
+   */
   drag(i: number, j: number) {
-    //recolecta todos los divs que se seleccionan
     let dragCell = this.soupContainer?.nativeElement.children[i].children[j];
     dragCell.classList.add('selected');
     if (!this.dragElements.includes(dragCell)) {
@@ -36,33 +65,23 @@ export class SopadeletrasComponent implements OnInit {
     }
   }
 
+  /**
+   * Maneja la palabra seleccionada (si es acierto o no)
+   * y modifica las clases del dom correspondientes
+   */
   drop() {
     //borra la palabra anterior
     this.dragWord = '';
-    //saca la clase seleccionado
+    //saca la clase seleccionado y obtiene palabra
     this.dragElements.forEach((e: any) => {
       this.renderer.removeClass(e, 'selected');
       this.dragWord += e.innerText;
     });
-    //chequea si la palabra es correcta
-    let index = this.words.indexOf(this.dragWord.toLowerCase());
-    if (index != -1) {
-      alert('correcto');
-      this.guessedWords.push(this.dragWord.toLowerCase());
-      this.words.slice(index, 1);
-
-      this.dragElements.forEach((e: any) => {
-        this.renderer.addClass(e, 'correct');
-      });
-    } else {
-      alert('nopopo');
-
-      this.dragElements.forEach((e: any) => {
-        this.renderer.addClass(e, 'error');
-        setTimeout(() => {
-          this.renderer.removeClass(e, 'error');
-        }, 500);
-      });
+    //chequea si la palabra es correcta, y luego si el juego terminó
+    if (this.checkWord()) {
+      if (this.gameEnd()) {
+        this.win = true;
+      }
     }
     //vacía el array de divs seleccionados
     this.dragElements = [];
@@ -70,10 +89,9 @@ export class SopadeletrasComponent implements OnInit {
 
   private getSoup(): Array<Array<string>> {
     this.words = this.getRandomWords();
-    console.log(this.words);
     let puzzle = WordFind().newPuzzle(this.words, {
-      height: 10,
-      width: 15,
+      height: 15,
+      width: 10,
       fillBlanks: true,
       orientations: [
         'horizontal',
@@ -86,11 +104,35 @@ export class SopadeletrasComponent implements OnInit {
         'diagonalUpBack',
       ],
     });
+    this.ready = true;
     return puzzle;
   }
 
   private getRandomWords(): Array<string> {
     let sortArray = words;
     return sortArray.sort((a, b) => 0.5 - Math.random()).slice(0, wordsBySoup);
+  }
+
+  private checkWord(): Boolean {
+    let index = this.words.indexOf(this.dragWord.toLowerCase());
+    if (index != -1) {
+      this.guessedWords.push(this.dragWord.toLowerCase());
+      this.words.splice(index, 1);
+      this.dragElements.forEach((e: any) => {
+        this.renderer.addClass(e, 'correct');
+      });
+    } else {
+      this.dragElements.forEach((e: any) => {
+        this.renderer.addClass(e, 'error');
+        setTimeout(() => {
+          this.renderer.removeClass(e, 'error');
+        }, 500);
+      });
+    }
+    return index != -1;
+  }
+
+  private gameEnd(): Boolean {
+    return this.words.length === 0;
   }
 }
