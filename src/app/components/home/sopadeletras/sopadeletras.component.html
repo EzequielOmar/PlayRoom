@@ -1,15 +1,30 @@
-<div ng-controller="myCtrl" class="game">
+<div class="game">
 
-  <div *ngIf="win || lost" class="message">
+  <div *ngIf="!playing" class="start">
+    <div class="row">
+      <div *ngFor="let char of 'SOPADELETRAS'.split(''); let even = even" class="cell" [class.selected]="even">
+        <span>
+          {{char}}
+        </span>
+      </div>
+      <button *ngIf="ready" (click)="startGame()">Comenzar</button>
+    </div>
+  </div>
+
+  <div *ngIf="(win || lost) && playing" class="message">
     <h3 style="color:#40b91a80" *ngIf="win">¡Felicitaciones!</h3>
     <strong style="color:#40b91a80" *ngIf="win">*Rompecabezas completado, presione el botón para reiniciar*</strong>
     <h3 style="color:#e80909ad" *ngIf="lost">¡Juego terminado!</h3>
     <strong style="color:#e80909ad" *ngIf="lost">*Se acabó el tiempo, presione el botón para reiniciar*</strong>
     <mat-icon (click)="startGame()" aria-hidden="false" aria-label="restart_alt icon">restart_alt
     </mat-icon>
+    <mat-icon (click)="cancel()" aria-hidden="false" aria-label="restart_alt icon">cancel
+    </mat-icon>
   </div>
 
-  <div class="wordsGuessed">
+  <app-timer *ngIf="playing" [counter]="counter" (gameOver)="gameOver()"></app-timer>
+
+  <div *ngIf="playing" class="wordsGuessed">
     <ul *ngFor="let word of guessedWords">
       <li>
         {{word}}
@@ -17,7 +32,7 @@
     </ul>
   </div>
 
-  <div *ngIf="soup && ready" class="soup" #soupContainer>
+  <div *ngIf="soup && playing" class="soup" #soupContainer>
     <div class="row" *ngFor="let row of soup;let i = index">
       <div #cell draggable="true" (dragover)="drag(i,j)" (dragend)="drop()" class="cell"
         *ngFor="let cell of row;let j = index">

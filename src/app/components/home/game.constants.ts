@@ -131,6 +131,8 @@ export const missesAllowed = 5;
 
 //sopa de letras palabras:
 export const wordsBySoup = 15;
+export const timeSoup = 6;
+export const bonusGuessedWord = 5;
 
 //mayoromenor
 export const cards = [
