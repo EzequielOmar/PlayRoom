@@ -23,7 +23,7 @@ export class AhorcadoService {
     this.lost = false;
   }
 
-  try(guess: string) {
+  try(guess: string):Boolean {
     let found = false;
     this.secretWord.forEach((letter: any) => {
       if (guess.toUpperCase() === letter.name.toUpperCase()) {
@@ -35,15 +35,20 @@ export class AhorcadoService {
       this.misses++;
     }
     this.checkForEndOfGame();
+    return found;
   }
 
-  missesLeft(){
+  missesLeft() {
     return missesAllowed - this.misses;
   }
 
   private getRandomWord(): string {
     let index = Math.floor(Math.random() * words.length);
-    return words[index];
+    if (words[index].length > 3) {
+      return words[index];
+    } else {
+      return this.getRandomWord();
+    }
   }
 
   private makeLetters(word: string): Array<any> {
@@ -70,7 +75,6 @@ export class AhorcadoService {
     this.win = this.secretWord.reduce((acc: any, letter: any) => {
       return acc && letter.chosen;
     }, true);
-
     if (!this.win && this.misses === missesAllowed) {
       this.lost = true;
       this.revealSecret();

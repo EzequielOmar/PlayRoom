@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   trigger,
   state,
@@ -7,6 +7,8 @@ import {
   style,
 } from '@angular/animations';
 import { AhorcadoService } from './ahorcado.service';
+import { timeAhorcado } from '../game.constants';
+import { TimerComponent } from '../common/timer/timer.component';
 
 @Component({
   selector: 'app-ahorcado',
@@ -96,6 +98,7 @@ import { AhorcadoService } from './ahorcado.service';
   ],
 })
 export class AhorcadoComponent implements OnInit {
+  @ViewChild(TimerComponent) countDown: TimerComponent = new TimerComponent();
   armR: Boolean = true;
   armL: Boolean = true;
   legR: Boolean = true;
@@ -105,32 +108,58 @@ export class AhorcadoComponent implements OnInit {
   letters: Array<any> = [];
   missesLeft: number = 0;
   error: string = '';
+  lost: Boolean = false;
   win: Boolean = false;
-  constructor(private hmc: AhorcadoService) {
-    this.reset();
-  }
+  playing: Boolean = false;
+  counter: number = timeAhorcado;
+
+  constructor(private hmc: AhorcadoService) {}
 
   ngOnInit(): void {}
 
-  reset() {
-    if (this.missesLeft > 0 && !this.win) {
-      this.error = '*El juego no ha terminado*';
-      return;
-    }
+  play() {
     this.hmc.reset();
-    this.error = '';
     this.secretWord = this.hmc.secretWord;
     this.letters = this.hmc.letters;
     this.missesLeft = this.hmc.missesLeft();
+    this.playing = true;
+    this.win = false;
+    this.lost = false;
+    this.error = '';
     this.armR = true;
     this.armL = true;
     this.legR = true;
     this.legL = true;
-    this.animation = false;
+    this.counter = timeAhorcado;
+    this.playing = true;
+    //start counter
+    setTimeout(() => {
+      this.countDown.start();
+    }, 500);
   }
 
+  cancel() {
+    this.playing = false;
+  }
+
+  gameOver() {
+    this.error = 'Se acabó el tiempo.';
+    this.missesLeft = 0;
+    this.lost = true;
+    this.countDown.stop();
+    this.handleAnimation();
+  }
+
+  /**
+   * Recibe el char seleccionado y chequea si es válido
+   * Si es un acierto suma 5 segundos al contador
+   * Si es un error, descuenta una chance y activa animación
+   * refresca el Dom
+   * chequea si gana o pierde
+   * @param char char seleccionao
+   */
   try(char: any) {
-    if (this.hmc.lost) {
+    if (this.lost) {
       this.error = '¡Perdiste!';
       return;
     }
@@ -139,7 +168,10 @@ export class AhorcadoComponent implements OnInit {
       return;
     }
     char.chosen = true;
-    this.hmc.try(char.name);
+    if (this.hmc.try(char.name)) {
+      this.countDown.addSeconds(5);
+    }
+    this.lost = this.hmc.lost;
     if (this.missesLeft > this.hmc.missesLeft()) {
       this.missesLeft = this.hmc.missesLeft();
       this.handleAnimation();

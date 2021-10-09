@@ -9,6 +9,7 @@ import { PreguntadosComponent } from './preguntados/preguntados.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SopadeletrasComponent } from './sopadeletras/sopadeletras.component';
 import { TimerComponent } from './common/timer/timer.component';
+import { ScoreComponent } from './common/score/score.component';
 
 @NgModule({
   imports: [CommonModule, MaterialModule, HttpClientModule],
@@ -20,6 +21,7 @@ import { TimerComponent } from './common/timer/timer.component';
     PreguntadosComponent,
     SopadeletrasComponent,
     TimerComponent,
+    ScoreComponent,
   ],
 })
 export class HomeModule {}

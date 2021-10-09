@@ -126,12 +126,13 @@ export const words = [
   'zip',
 ];
 
-//ahorado errores:
+//ahorcado:
 export const missesAllowed = 5;
+export const timeAhorcado = 30;
 
 //sopa de letras palabras:
 export const wordsBySoup = 15;
-export const timeSoup = 6;
+export const timeSoup = 60;
 export const bonusGuessedWord = 5;
 
 //mayoromenor

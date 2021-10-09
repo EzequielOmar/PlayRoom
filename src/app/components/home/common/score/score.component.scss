@@ -1,0 +1,19 @@
+fieldset {
+  legend {
+    margin: 0;
+    float:left;
+  }
+  div {
+    strong {
+      width: 100%;
+    }
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    justify-content: center;
+  }
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  border: 1px solid white;
+}

@@ -2,7 +2,22 @@
 
   <div class="ahorcado">
 
-    <div class="ahorcado-imagen">
+    <div *ngIf="!playing" class="loby">
+      <h3>Juega con Tito el Coder, sálvalo adivinando la palabra.</h3>
+      <span>
+        *Busca una palabra en inglés relacionada al mundo del software*
+      </span>
+      <div>
+        <button (click)="play()">Comenzar</button>
+      </div>
+    </div>
+
+    <div class="count">
+      <app-timer #countDown *ngIf="playing" [counter]="counter" (gameOver)="gameOver()"></app-timer>
+      <app-score></app-score>
+    </div>
+
+    <div *ngIf="playing" class="ahorcado-imagen">
       <svg #man viewBox="0 -35 72 160" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="36.6084" cy="20" r="19" stroke="white" stroke-width="2" />
         <line x1="37" y1="40" x2="37" y2="92" stroke="white" stroke-width="2" />
@@ -55,7 +70,7 @@
             fill="white" />
         </g>
 
-        <g id="worry" *ngIf="!animation && missesLeft <= 3 && missesLeft > 0">
+        <g id="worry" *ngIf="!animation && !win && missesLeft <= 3 && missesLeft > 0">
           <line x1="33.4891" y1="11.237" x2="31.9713" y2="17.4577" stroke="white" stroke-width="2" />
           <line x1="35" y1="18" x2="31" y2="18" stroke="white" stroke-width="2" />
           <line x1="50.0905" y1="23.9959" x2="29.09054" y2="24.9959" stroke="white" stroke-width="2" />
@@ -74,48 +89,44 @@
       </svg>
     </div>
 
-    <div class="game">
+    <div *ngIf="playing" class="game">
+
       <div class="message">
         <div *ngIf="!error && !win" [ngSwitch]="missesLeft">
-          <div *ngSwitchCase="5" class="game-end">
+          <div *ngSwitchCase="5">
             <h2>¡Salva a Tito el Coder!</h2>
-            <span>
-              *Adivina la palabra relacionada al software*
-            </span>
           </div>
-          <div *ngSwitchCase="4" class="game-end">
+          <div *ngSwitchCase="4">
             <h2>¡Salva a Tito el Coder!</h2>
-            <span>
-              *Te quedan {{missesLeft}} chances*
-            </span>
           </div>
-          <div *ngSwitchCase="3" class="game-end">
+          <div *ngSwitchCase="3">
             <h2>¡No tiene piernas!</h2>
-            <span>
-              *Te quedan {{missesLeft}} chances*
-            </span>
           </div>
-          <div *ngSwitchCase="2" class="game-end">
+          <div *ngSwitchCase="2">
             <h2>¡Concéntrate!</h2>
-            <span>
-              *Te quedan {{missesLeft}} chances*
-            </span>
           </div>
-          <div *ngSwitchCase="1" class="game-end">
+          <div *ngSwitchCase="1">
             <h2>Tito ya no podrá codear... ¡Perdió los codos!</h2>
-            <span>
-              *Te queda sólo {{missesLeft}} chance*
-            </span>
           </div>
-          <div *ngSwitchCase="0" class="game-end">
+          <div *ngSwitchCase="0">
             <h2>¡Noooooo Tito!</h2>
             <span>
               *El juego terminó, tu palabra es:*
             </span>
           </div>
+          <div *ngIf=" missesLeft === 5">
+            <span>
+              *La palabra tiene {{secretWord.length}} letras*
+            </span>
+          </div>
+          <div *ngIf="missesLeft != 0">
+            <span>
+              *Tienes {{missesLeft}} oportunidades restantes.*
+            </span>
+          </div>
         </div>
         <span class="error" *ngIf="error">{{error}}</span>
-        <span *ngIf="error && missesLeft === 0">*Oprime el botón de reload para reiniciar el juego*</span>
+        <span *ngIf="error && missesLeft === 0">*Oprime el botón para jugar de nuevo*</span>
         <h2 *ngIf="win">¡Ganaste, Salvaste a Tito!</h2>
       </div>
 
@@ -136,7 +147,11 @@
         </div>
       </div>
 
-      <mat-icon (click)="reset()" aria-hidden="false" aria-label="restart_alt icon">restart_alt</mat-icon>
+      <div class="play-again-button">
+        <mat-icon *ngIf="win || lost" (click)="play()" aria-hidden="false" aria-label="restart_alt icon">restart_alt
+        </mat-icon>
+        <mat-icon (click)="cancel();" aria-hidden="false" aria-label="restart_alt icon">cancel</mat-icon>
+      </div>
 
     </div>
 

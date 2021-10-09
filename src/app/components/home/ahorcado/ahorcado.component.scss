@@ -2,6 +2,11 @@
 .board {
   //juego con imagen
   .ahorcado {
+    //loby
+    .loby{
+      text-align: center;
+      width: 100%;
+    }
     //imagen del ahorcado
     .ahorcado-imagen {
       img {
@@ -25,9 +30,13 @@
       .secret-word {
         margin: 1.5rem 0;
       }
-      mat-icon {
-        font-size: xxx-large;
-        padding: 1rem 0;
+      .play-again-button {
+        mat-icon {
+          font-size: xxx-large;
+          padding: 0;
+        }
+        display: flex;
+        justify-content: space-evenly;
       }
       width: 100%;
       text-align: center;
@@ -35,7 +44,7 @@
     display: flex;
     align-items: center;
     height: 300px;
-    width: 450px;
+    width: 475px;
   }
   display: flex;
   justify-content: center;
@@ -101,13 +110,21 @@ mat-icon {
   50% {
     transform: translate(25px, 6px);
   }
-  100%{
+  100% {
     transform: translate(22px, 6px);
   }
 }
 
 #pain {
   animation-name: screem;
-  animation-duration: .5s;
+  animation-duration: 0.5s;
   animation-iteration-count: infinite;
+}
+
+button {
+  width: 30%;
+  padding: 0.5rem;
+  margin: 1rem;
+  background: none;
+  color: white;
 }
