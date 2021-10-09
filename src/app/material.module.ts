@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 //Angular Material Components
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -33,7 +32,6 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   imports: [
-    BrowserAnimationsModule,
     MatInputModule,
     MatAutocompleteModule,
     MatDatepickerModule,
@@ -64,7 +62,6 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatPaginatorModule,
   ],
   exports: [
-    BrowserAnimationsModule,
     MatInputModule,
     MatAutocompleteModule,
     MatDatepickerModule,
