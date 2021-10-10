@@ -7,9 +7,7 @@ import { Component, OnDestroy } from '@angular/core';
 })
 export class AppComponent implements OnDestroy {
   title = 'SalaDeJuegos';
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 }

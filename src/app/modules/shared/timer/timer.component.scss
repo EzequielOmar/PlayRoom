@@ -1,5 +1,7 @@
 .timer {
-  padding: 1rem;
+  text-align: center;
+  max-width: 60px;
+  padding:  .45rem 0;
   border-radius: 2rem;
   font-size: large;
   border: white 1.5px solid;
@@ -7,6 +9,7 @@
   animation-iteration-count: infinite;
   animation-duration: 1.5s;
   animation-timing-function: ease-in-out;
+  background: #607d8b85;
 }
 
 @keyframes popup {

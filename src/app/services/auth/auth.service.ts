@@ -8,18 +8,20 @@ import { Validator } from './Validators';
   providedIn: 'root',
 })
 export class AuthService {
-  private user: Observable<firebase.User | null>;
+  private user: firebase.User | null = null;
   constructor(private angularFireAuth: AngularFireAuth) {
-    this.user = angularFireAuth.authState;
+    angularFireAuth.authState.subscribe((u) => {
+      this.user = u;
+    });
   }
 
-  // Obtener el estado de autenticación
+  // Obtener True o false si hay un usuario logueado
   get authenticated(): boolean {
     return this.user != null; // True ó False
   }
 
-  // Obtener el observador del usuario actual
-  get currentUser(): Observable<firebase.User | null> {
+  // Obtener los datos del usuario logueado, o null si no hubiere
+  get currentUser(): firebase.User | null {
     return this.user;
   }
 

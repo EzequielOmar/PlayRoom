@@ -1,19 +1,41 @@
+*{
+  margin: 0;
+  padding: 0;
+}
 fieldset {
   legend {
-    margin: 0;
-    float:left;
+    float: none;
+    width: auto;
+    font-size: larger;
   }
   div {
     strong {
       width: 100%;
     }
+    span {
+      font-weight: 100;
+      font-size: x-small;
+    }
+    padding: 0 .5rem;
     display: flex;
     flex-wrap: wrap;
     width: 50%;
     justify-content: center;
   }
+  line-height: normal;
+  min-width: 100px;
+  min-height: 55px;
+  padding: 0 .5rem;
   display: flex;
   flex-wrap: wrap;
   text-align: center;
   border: 1px solid white;
+  border-radius: 22px;
+  border-top-width: medium;
+  border-bottom-style: hidden;
+  background: #607d8b85;
+}
+
+.success{
+  color:#00db09;
 }
