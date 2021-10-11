@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { I_UserSession } from 'src/app/interfaces/user.interface';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { I_Message } from 'src/app/interfaces/message.interface';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-chat',
@@ -11,13 +12,11 @@ import { I_Message } from 'src/app/interfaces/message.interface';
 export class ChatComponent implements OnInit {
   @ViewChild('scroll') private scrollContainer: ElementRef = {} as ElementRef;
   @ViewChild('input') private input: ElementRef = {} as ElementRef;
-  user: I_UserSession | null;
+  user: firebase.User | null;
   messages: any[] = [];
   error: string = '';
-  constructor(private chatDb: ChatService) {
-    localStorage.getItem('user')
-      ? (this.user = JSON.parse(localStorage.getItem('user') ?? ''))
-      : (this.user = null);
+  constructor(private chatDb: ChatService, private auth: AuthService) {
+    this.user = this.auth.currentUser;
   }
 
   ngOnInit(): void {
@@ -44,8 +43,8 @@ export class ChatComponent implements OnInit {
     let message: I_Message = {
       message: input,
       uid: this.user?.uid ?? '',
-      datetime: new Date().toJSON(),
-      username: this.user.username,
+      datetime: new Date().toLocaleString(),
+      username: this.user.displayName ?? '',
     };
     this.chatDb.newMessage(message);
   }

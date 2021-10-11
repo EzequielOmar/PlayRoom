@@ -11,5 +11,5 @@ export const events = {
 export interface I_logDb {
   uid: string;
   event: string;
-  datetime: string;
+  datetime: string;//Data.toLocalString()
 }

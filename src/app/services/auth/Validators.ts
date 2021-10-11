@@ -5,7 +5,7 @@ export class Validator {
       email.endsWith('@hotmail.com') ||
       email.endsWith('@saladejuegos.com')
     if (!validEmail) {
-      throw new Error('Mal formato de datos.');
+      throw new Error('El nombre del proveedor no corresponde.');
     }
     return email;
   };

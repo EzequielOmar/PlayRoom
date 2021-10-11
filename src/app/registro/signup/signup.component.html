@@ -12,34 +12,43 @@
     </div>
 
     <!-- Signup Form -->
-    <form #signupForm="ngForm" (ngSubmit)="signUp(signupForm)">
-
-      <span *ngIf="email.errors?.required && submitted">
-        Por favor, ingrese el Correo Electrónico.
-      </span>
-      <input required [(ngModel)]="signup.email" #email="ngModel" name="email" type="email" placeholder="correo"
+    <form *ngIf="!spinner" [formGroup]="form"  (ngSubmit)="signUp()">
+      <!--Email-->
+      <input minlength=9 maxlength=40 formControlName="email" required name="email" type="email" placeholder="correo"
         class="fadeIn first">
-
-      <input [(ngModel)]="signup.username" #username="ngModel" name="username" type="text"
-        placeholder="Nombre de usuario" class="fadeIn first">
-
-      <span *ngIf="password.errors?.required && submitted">
-        Por favor, ingrese una contraseña.
+      <span *ngIf="form.controls['email'].errors?.required && (submitted || form.controls['email'].touched)">
+        Por favor, ingrese el corréo electrónico.
       </span>
-      <span *ngIf="password.errors?.minlength && submitted">
-        La contraseña es demasiado corta.
+      <span *ngIf="form.controls['email'].errors?.minlength && (submitted || form.controls['email'].touched)">
+        La dirección ingresada es muy corta.
       </span>
-      <input required [(ngModel)]="pass" #password="ngModel" required minlength="6" name="password" type="password"
-        placeholder="Contraseña" class="fadeIn second">
-
-      <span *ngIf="passCheck !== password.value && submitted || passCheck == '' && submitted">
+      <span *ngIf="form.controls['email'].errors?.maxlength && (submitted || form.controls['email'].touched)">
+        La dirección ingresada es muy larga.
+      </span>
+      <!--Username-->
+      <input formControlName="username" name="username" type="text" placeholder="Nombre de usuario"
+        class="fadeIn first">
+      <!--Password-->
+      <input minlength=6 maxlength=30 formControlName="password" required required minlength="6" name="password"
+        type="password" placeholder="Contraseña" class="fadeIn second">
+      <span *ngIf="form.controls['password'].errors?.required && (submitted || form.controls['password'].touched)">
+        Por favor, ingrese su contraseña.
+      </span>
+      <span *ngIf="form.controls['password'].errors?.minlength &&  (submitted || form.controls['password'].touched)">
+        La constraseña ingresada es muy corta.
+      </span>
+      <span *ngIf="form.controls['password'].errors?.minlength &&  (submitted || form.controls['password'].touched)">
+        La constraseña ingresada es demasiado larga.
+      </span>
+      <!--PassCheck-->
+      <input minlength=6 maxlength=30 formControlName="passCheck" required name="passCheck" type="password"
+        placeholder="Repetir Contraseña" class="fadeIn third">
+      <span
+        *ngIf="form.controls['passCheck'].value !== form.controls['password'].value && (submitted || form.controls['passCheck'].touched)">
         Las contraseñas no coinciden.
       </span>
-      <input [(ngModel)]="passCheck" required name="passCheck" type="password" placeholder="Repetir Contraseña"
-        class="fadeIn third">
-
+      <!--send-->
       <input type="submit" class="fadeIn fourth" value="Registrarse">
-
     </form>
 
     <div id="formFooter" class="d-flex justify-content-evenly">

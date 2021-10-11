@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { I_UserDb } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -10,29 +9,40 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['../login/login.component.scss'],
 })
 export class PassRecoveryComponent implements OnInit {
-  login: I_UserDb = { email: '', username: '', createdAt: '' };
+  form: FormGroup;
   submitted = false;
   spinner = false;
-  error = '';
-  success = '';
-  constructor(private auth: AuthService, private router: Router) {}
+  response = '';
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({
+      email: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {}
 
-  recovery(form: NgForm) {
+  recovery() {
     this.submitted = true;
-    if (form.valid) {
+    if (this.form.valid) {
       this.spinner = true;
       this.auth
-        .passRecovery(form.form.value.email)
+        .passRecovery(this.form.controls['email'].value)
         .then(() => {
-          this.success =
+          this.response =
             'El email a sido enviado correctamente, chequea tu casilla de mensajes.';
         })
-        .catch((error) => (this.error = error))
+        .catch((error) => (this.response = error))
         .finally(() => {
           this.spinner = false;
         });
     }
+  }
+
+  goToLogin() {
+    this.router.navigate(['/auth/login']);
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',

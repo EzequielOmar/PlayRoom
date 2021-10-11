@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { I_UserDb } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ListenMenuService } from 'src/app/services/menu/listen-menu.service';
-import { UserDbService } from 'src/app/services/user/user-db.service';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-nav',
@@ -12,30 +11,25 @@ import { UserDbService } from 'src/app/services/user/user-db.service';
   styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit, OnDestroy {
-  user: I_UserDb = { email: '', username: '', createdAt: '' };
+  user?: firebase.User | null;
   uid: string = '';
   showMenu: Boolean;
   sub?: Subscription;
   constructor(
     private auth: AuthService,
-    private dbUsers: UserDbService,
     private router: Router,
     private menuState: ListenMenuService
   ) {
     this.showMenu = true;
-    //current user
-    if (this.auth.authenticated) {
-      this.user.email = this.auth.currentUser?.email ?? '';
-      this.user.username = this.auth.currentUser?.displayName ?? '';
-      this.uid = this.auth.currentUser?.uid ?? '';
-    }
     //listen menu state
     this.sub = menuState.menu.subscribe((e) => {
       this.showMenu = e;
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.checkUserOrRedirect();
+  }
 
   toggleMenu() {
     this.showMenu
@@ -43,26 +37,20 @@ export class NavComponent implements OnInit, OnDestroy {
       : this.menuState.toggleMenu(true);
   }
 
-  goHome() {
-    this.router.navigate(['home/menuList:about']);
-  }
-
   signOut() {
-    this.auth.signOut();
-    this.dbUsers.saveLogout(this.uid);
-    localStorage.setItem('user', JSON.stringify(null));
-    this.router.navigate(['login']);
-  }
-
-  goToAbout() {
-    this.router.navigate(['about']);
-  }
-
-  logIn() {
-    this.router.navigate(['login']);
+    this.auth.signOut().then(() => {
+      this.router.navigate(['/auth/login']);
+    });
   }
 
   ngOnDestroy() {
     this.sub?.unsubscribe();
+  }
+
+  private checkUserOrRedirect() {
+    this.user = this.auth.currentUser;
+    setTimeout(() => {
+      if (!this.user) this.signOut();
+    }, 1000);
   }
 }

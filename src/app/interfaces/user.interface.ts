@@ -1,17 +1,13 @@
 /**
  * formato de usuario para guardar en base de datos
  */
-export interface I_UserDb {
+export interface UserData {
   email: string;
   username: string;
-  createdAt: string;
+  createdAt: string; //Date.toLocalString()
+  lastModifAt: string; //Date.toLocalString()
 }
-
-/**
- * formato de usuario para guardar en localstorage
- */
-export interface I_UserSession {
-  uid:string;
-  username:string;
-  email:string;
+export interface User {
+  uid: string;
+  data: UserData;
 }

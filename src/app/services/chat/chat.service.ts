@@ -1,7 +1,7 @@
 import { I_Message } from 'src/app/interfaces/message.interface';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { databases } from '../db/const';
+import { databases } from '../dbNames';
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +9,12 @@ import { databases } from '../db/const';
 export class ChatService {
   constructor(private afs: AngularFirestore) {}
 
-  getMessages(){
+  getMessages() {
     return this.afs.firestore
       .collection(databases.chat)
       .orderBy('datetime', 'asc')
       .limit(50);
-  };
+  }
 
   newMessage = async (message: I_Message) => {
     await this.afs.collection(databases.chat).add(message);

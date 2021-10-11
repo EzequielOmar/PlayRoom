@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Observable } from 'rxjs';
 import firebase from 'firebase/compat/app';
+import { events } from 'src/app/interfaces/log.interface';
+import { UserData } from 'src/app/interfaces/user.interface';
+import { LogService } from '../log/log.service';
+import { UserService } from '../user/user.service';
 import { Validator } from './Validators';
 
 @Injectable({
@@ -9,7 +12,11 @@ import { Validator } from './Validators';
 })
 export class AuthService {
   private user: firebase.User | null = null;
-  constructor(private angularFireAuth: AngularFireAuth) {
+  constructor(
+    private angularFireAuth: AngularFireAuth,
+    private log: LogService,
+    private userDb: UserService
+  ) {
     angularFireAuth.authState.subscribe((u) => {
       this.user = u;
     });
@@ -29,6 +36,8 @@ export class AuthService {
    * Recibe email y pass
    * Success -> loguea al usuario actualizando
    * el estado de user(Observable) y retorna respuesta (evento y usuario)
+   * Guarda log en coleccion logs
+   *
    * Error-> retorna el texto del error que corresponda listo
    * para imprimir en pantalla.
    * *Posibles errores de signInWithEmailAndPassword:*
@@ -41,7 +50,10 @@ export class AuthService {
   signIn = async (email: string, password: string) =>
     await this.angularFireAuth
       .signInWithEmailAndPassword(Validator.email(email), password)
-      .then((res) => res)
+      .then((res) => {
+        this.log.saveEvent(res.user?.uid ?? '', events.logIn);
+        return res;
+      })
       .catch((error) => {
         if (error.code === 'auth/user-disabled') {
           throw new Error('El usuario ha sido deshabilitado.');
@@ -56,7 +68,10 @@ export class AuthService {
    * Recibe email y pass
    * Success -> crea y loguea al nuevo usuario actualizando
    * el estado de user(Observable), guarda el username (si no es un string vacio) en el current user
+   * Guarda usuario
+   * Guarda Log de evento
    * Envía el mail de verificación y retorna respuesta (evento y usuario)
+   *   *
    * Error-> retorna el texto del error que corresponda listo
    * para imprimir en pantalla.
    * *Posibles errores de createUserWithEmailAndPassword:*
@@ -77,6 +92,12 @@ export class AuthService {
             //  photoURL: 'https://example.com/jane-q-user/profile.jpg',
           });
         }
+        let user = this.dataToUser(
+          res.user?.email ?? '',
+          res.user?.displayName ?? ''
+        );
+        this.userDb.newUser(res.user?.uid ?? '', user);
+        this.log.saveEvent(res.user?.uid ?? '', events.signUp);
         firebase.auth().currentUser?.sendEmailVerification();
         return res;
       })
@@ -110,6 +131,10 @@ export class AuthService {
 
   /*
    * Abre la ventana encargada de elegir la cuenta de google para loguearse.
+   * Recibe los datos, Se fija si el usuario existe en la coleccion usuarios
+   * si no existe, guarda el nuevo usuario
+   * guarda el log correspondiente
+   *
    * @returns retorna el evento (contiene el usuario)
    * o throw error con mensaje listo para mostrar
    * res.credential.accessToken -> Google Acces Token
@@ -119,11 +144,26 @@ export class AuthService {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('profile');
     provider.addScope('email');
-    return await this.signUpWithProvider(provider);
+    let res = await this.signUpWithProvider(provider);
+    if (!this.userDb.exists(res?.user?.uid ?? '')) {
+      let user = this.dataToUser(
+        res.user?.email ?? '',
+        res.user?.displayName ?? ''
+      );
+      this.userDb.newUser(res?.user?.uid ?? '', user);
+      this.log.saveEvent(res?.user?.uid ?? '', events.signUpGoogle);
+    } else {
+      this.log.saveEvent(res?.user?.uid ?? '', events.logInGoogle);
+    }
+    return res;
   };
 
   /*
    * Abre la ventana encargada de elegir la cuenta de twitter para loguearse.
+   * Recibe los datos, Se fija si el usuario existe en la coleccion usuarios
+   * si no existe, guarda el nuevo usuario
+   * guarda el log correspondiente
+   *
    * @returns retorna el evento (contiene el usuario)
    * o throw error con mensaje listo para mostrar
    * res.credential.accessToken -> Google Acces Token
@@ -131,7 +171,18 @@ export class AuthService {
    */
   signUpWithTwitter = async () => {
     const provider = new firebase.auth.TwitterAuthProvider();
-    return await this.signUpWithProvider(provider);
+    let res = await this.signUpWithProvider(provider);
+    if (!this.userDb.exists(res?.user?.uid ?? '')) {
+      let user = this.dataToUser(
+        res.user?.email ?? '',
+        res.user?.displayName ?? ''
+      );
+      this.userDb.newUser(res?.user?.uid ?? '', user);
+      this.log.saveEvent(res?.user?.uid ?? '', events.signUpTwitter);
+    } else {
+      this.log.saveEvent(res?.user?.uid ?? '', events.logInTwitter);
+    }
+    return res;
   };
 
   private signUpWithProvider = async (provider: any) =>
@@ -141,4 +192,13 @@ export class AuthService {
       .catch(() => {
         throw new Error('Operación cancelada.');
       });
+
+  private dataToUser(email: string, username: string): UserData {
+    return {
+      email: email,
+      username: username,
+      createdAt: new Date().toLocaleString(),
+      lastModifAt: '',
+    };
+  }
 }

@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { I_UserDb, I_UserSession } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { UserDbService } from 'src/app/services/user/user-db.service';
-import { events, I_logDb } from 'src/app/interfaces/log.interface';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-signup',
@@ -12,37 +9,42 @@ import { events, I_logDb } from 'src/app/interfaces/log.interface';
   styleUrls: ['../login/login.component.scss'],
 })
 export class SignupComponent implements OnInit {
-  signup: I_UserDb = { email: '', username: '', createdAt: '' };
+  form: FormGroup;
   submitted = false;
   spinner = false;
-  pass: string;
-  passCheck: string;
   error = '';
 
   constructor(
     private auth: AuthService,
     private router: Router,
-    private dbUsers: UserDbService
+    private fb: FormBuilder
   ) {
-    this.pass = '';
-    this.passCheck = '';
+    this.form = this.fb.group({
+      email: ['', Validators.required],
+      username: [''],
+      password: ['', Validators.required],
+      passCheck: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {}
 
-  signUp(form: NgForm) {
+  signUp() {
     this.submitted = true;
-    if (form.valid && this.passCheck === this.pass) {
+    if (
+      this.form.valid &&
+      this.form.controls['passCheck'].value ===
+        this.form.controls['password'].value
+    ) {
       this.spinner = true;
       this.auth
         .signUp(
-          form.form.value.email,
-          form.form.value.password,
-          form.form.value.username
+          this.form.controls['email'].value,
+          this.form.controls['password'].value,
+          this.form.controls['username'].value
         )
-        .then((res) => {
-          this.saveNewUser(res, events.signUp, form.form.value.username);
-          this.saveSessionAndRedirect(res, form.form.value.username);
+        .then(() => {
+          this.redirect();
         })
         .catch((error) => (this.error = error))
         .finally(() => {
@@ -54,17 +56,8 @@ export class SignupComponent implements OnInit {
   signUpWithGoogle() {
     this.auth
       .signUpWithGoogle()
-      .then((res) => {
-        if (
-          !this.saveNewUser(
-            res,
-            events.signUpGoogle,
-            res.user?.displayName ?? ''
-          )
-        ) {
-          this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInGoogle);
-        }
-        this.saveSessionAndRedirect(res);
+      .then(() => {
+        this.redirect();
       })
       .catch((error) => (this.error = error))
       .finally(() => {
@@ -75,17 +68,8 @@ export class SignupComponent implements OnInit {
   signUpWithTwitter() {
     this.auth
       .signUpWithTwitter()
-      .then((res) => {
-        if (
-          !this.saveNewUser(
-            res,
-            events.logInTwitter,
-            res.user?.displayName ?? ''
-          )
-        ) {
-          this.dbUsers.saveLogin(res.user?.uid ?? '', events.logInTwitter);
-        }
-        this.saveSessionAndRedirect(res);
+      .then(() => {
+        this.redirect();
       })
       .catch((error) => (this.error = error))
       .finally(() => {
@@ -94,29 +78,10 @@ export class SignupComponent implements OnInit {
   }
 
   goToLogin() {
-    this.router.navigate(['login']);
+    this.router.navigate(['/auth/login']);
   }
 
-  private saveNewUser(res: any, event: string, username?: string): Boolean {
-    if (!this.dbUsers.exists(res.user?.uid ?? '')) {
-      this.dbUsers.saveNewUser(
-        res.user?.uid ?? '',
-        res.user?.email ?? '',
-        event,
-        res.user?.displayName ?? username ?? ''
-      );
-      return true;
-    }
-    return false;
-  }
-
-  private saveSessionAndRedirect(res: any, username?: string) {
-    let user: I_UserSession = {
-      uid: res.user?.uid ?? '',
-      username: res.user?.displayName ?? username ?? '',
-      email: res.user?.email ?? '',
-    };
-    localStorage.setItem('user', JSON.stringify(user));
-    this.router.navigate(['/']);
+  private redirect() {
+    this.router.navigate(['/home']);
   }
 }
