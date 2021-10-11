@@ -28,7 +28,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.checkUserOrRedirect();
+    this.user = this.auth.currentUser;
   }
 
   toggleMenu() {
@@ -38,7 +38,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   signOut() {
-    this.auth.signOut().then(() => {
+    this.auth.signOut(this.user?.uid ?? '').then(() => {
       this.router.navigate(['/auth/login']);
     });
   }
@@ -47,10 +47,4 @@ export class NavComponent implements OnInit, OnDestroy {
     this.sub?.unsubscribe();
   }
 
-  private checkUserOrRedirect() {
-    this.user = this.auth.currentUser;
-    setTimeout(() => {
-      if (!this.user) this.signOut();
-    }, 1000);
-  }
 }

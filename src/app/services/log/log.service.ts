@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { DbService } from '../db/db.service';
 import { databases } from '../dbNames';
-import { I_logDb } from 'src/app/interfaces/log.interface';
+import { Log } from 'src/app/interfaces/log.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LogService {
-  private log: I_logDb = { event: '', uid: '', datetime: '' };
+  private log: Log = { event: '', uid: '', datetime: '' };
   constructor(private db: DbService) {}
 
   /**

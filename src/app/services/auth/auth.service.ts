@@ -94,7 +94,7 @@ export class AuthService {
         }
         let user = this.dataToUser(
           res.user?.email ?? '',
-          res.user?.displayName ?? ''
+          res.user?.displayName ?? username ?? ''
         );
         this.userDb.newUser(res.user?.uid ?? '', user);
         this.log.saveEvent(res.user?.uid ?? '', events.signUp);
@@ -123,10 +123,13 @@ export class AuthService {
 
   /**
    * Termina la sesion del usuario activo
+   * guarda el log
    * actualiza user(Observable) = null
    */
-  signOut = async () => {
-    await this.angularFireAuth.signOut();
+  signOut = async (uid: string) => {
+    await this.angularFireAuth.signOut().then(() => {
+      if (uid) this.log.saveEvent(uid, events.logOut);
+    });
   };
 
   /*
@@ -134,6 +137,7 @@ export class AuthService {
    * Recibe los datos, Se fija si el usuario existe en la coleccion usuarios
    * si no existe, guarda el nuevo usuario
    * guarda el log correspondiente
+   * envia mail de verificación
    *
    * @returns retorna el evento (contiene el usuario)
    * o throw error con mensaje listo para mostrar
@@ -144,18 +148,19 @@ export class AuthService {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('profile');
     provider.addScope('email');
-    let res = await this.signUpWithProvider(provider);
-    if (!this.userDb.exists(res?.user?.uid ?? '')) {
-      let user = this.dataToUser(
-        res.user?.email ?? '',
-        res.user?.displayName ?? ''
-      );
-      this.userDb.newUser(res?.user?.uid ?? '', user);
-      this.log.saveEvent(res?.user?.uid ?? '', events.signUpGoogle);
-    } else {
-      this.log.saveEvent(res?.user?.uid ?? '', events.logInGoogle);
-    }
-    return res;
+    return await this.signUpWithProvider(provider).then((res) => {
+      this.userDb.exists(res?.user?.uid ?? '').then((exists: Boolean) => {
+        if (!exists) {
+          let user = this.dataToUser(
+            res.user?.email ?? '',
+            res.user?.displayName ?? ''
+          );
+          this.userDb.newUser(res?.user?.uid ?? '', user);
+          this.log.saveEvent(res?.user?.uid ?? '', events.signUpGoogle);
+          firebase.auth().currentUser?.sendEmailVerification();
+        } else this.log.saveEvent(res?.user?.uid ?? '', events.logInGoogle);
+      });
+    });
   };
 
   /*
@@ -171,18 +176,18 @@ export class AuthService {
    */
   signUpWithTwitter = async () => {
     const provider = new firebase.auth.TwitterAuthProvider();
-    let res = await this.signUpWithProvider(provider);
-    if (!this.userDb.exists(res?.user?.uid ?? '')) {
-      let user = this.dataToUser(
-        res.user?.email ?? '',
-        res.user?.displayName ?? ''
-      );
-      this.userDb.newUser(res?.user?.uid ?? '', user);
-      this.log.saveEvent(res?.user?.uid ?? '', events.signUpTwitter);
-    } else {
-      this.log.saveEvent(res?.user?.uid ?? '', events.logInTwitter);
-    }
-    return res;
+    return await this.signUpWithProvider(provider).then((res) => {
+      this.userDb.exists(res?.user?.uid ?? '').then((exists: Boolean) => {
+        if (!exists) {
+          let user = this.dataToUser(
+            res.user?.email ?? '',
+            res.user?.displayName ?? ''
+          );
+          this.userDb.newUser(res?.user?.uid ?? '', user);
+          this.log.saveEvent(res?.user?.uid ?? '', events.signUpTwitter);
+        } else this.log.saveEvent(res?.user?.uid ?? '', events.logInTwitter);
+      });
+    });
   };
 
   private signUpWithProvider = async (provider: any) =>

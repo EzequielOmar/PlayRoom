@@ -13,11 +13,9 @@ export class UserService {
     this.db.setWithId(databases.users, uid, user);
   }
 
-  exists = async (uid: string) => {
-    let res = false;
-    await this.db.getDocOnce(databases.users, uid).then(() => {
-      res = true;
-    });
-    return res;
-  };
+  exists = async (uid: string) =>
+    await this.db
+      .getDocOnce(databases.users, uid)
+      .then(() => true)
+      .catch(() => false);
 }

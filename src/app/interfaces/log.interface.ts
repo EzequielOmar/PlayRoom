@@ -8,7 +8,7 @@ export const events = {
   logOut: 'logout',
 };
 
-export interface I_logDb {
+export interface Log {
   uid: string;
   event: string;
   datetime: string;//Data.toLocalString()
