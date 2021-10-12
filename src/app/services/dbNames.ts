@@ -1,5 +1,6 @@
 export const databases = {
   users: 'usuarios',
   logs: 'logs',
-  chat: 'chat'
+  chat: 'chat',
+  score: 'score',
 };

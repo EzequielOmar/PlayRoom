@@ -149,6 +149,7 @@ export class AuthService {
     provider.addScope('profile');
     provider.addScope('email');
     return await this.signUpWithProvider(provider).then((res) => {
+      console.log(res);
       this.userDb.exists(res?.user?.uid ?? '').then((exists: Boolean) => {
         if (!exists) {
           let user = this.dataToUser(

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from 'src/app/services/chat/chat.service';
-import { I_Message } from 'src/app/interfaces/message.interface';
+import { Message, messageData } from 'src/app/interfaces/message.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import firebase from 'firebase/compat/app';
 
@@ -13,7 +13,7 @@ export class ChatComponent implements OnInit {
   @ViewChild('scroll') private scrollContainer: ElementRef = {} as ElementRef;
   @ViewChild('input') private input: ElementRef = {} as ElementRef;
   user: firebase.User | null;
-  messages: any[] = [];
+  messages: Message[] = [];
   error: string = '';
   constructor(private chatDb: ChatService, private auth: AuthService) {
     this.user = this.auth.currentUser;
@@ -26,7 +26,7 @@ export class ChatComponent implements OnInit {
     this.chatDb.getMessages().onSnapshot((snap) => {
       this.messages = [];
       snap.forEach((child: any) => {
-        this.messages.push(child.data());
+        this.messages.push({ id: child.id, data: child.data() });
       });
       setTimeout(() => {
         this.scrollToBottom();
@@ -40,10 +40,11 @@ export class ChatComponent implements OnInit {
       this.error = 'Solo usuarios logueados pueden usar el chat';
       return;
     }
-    let message: I_Message = {
+    let message: messageData = {
       message: input,
       uid: this.user?.uid ?? '',
-      datetime: new Date().toLocaleString(),
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
       username: this.user.displayName ?? '',
     };
     this.chatDb.newMessage(message);

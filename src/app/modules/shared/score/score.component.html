@@ -1,12 +1,13 @@
 <fieldset>
   <legend>Score</legend>
   <div>
-    <number-tracker [end]="counterUserScore"></number-tracker>
+    <number-tracker [end]="currentUserScore?.scores?.total?.toString()??'0'"></number-tracker>
     <span>Total</span>
   </div>
   <div>
     <span [class.success]="counterGameScore"><strong *ngIf="counterGameScore">+</strong></span>
-    <number-tracker [color]="counterGameScore !== '0' && counterGameScore ? '#00db09':''" [end]="counterGameScore">
+    <number-tracker [color]="counterGameScore !== 0 && counterGameScore ? '#00db09':''"
+      [end]="counterGameScore.toString()">
     </number-tracker>
     <span>Acum.</span>
   </div>

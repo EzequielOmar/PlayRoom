@@ -1,14 +1,16 @@
-
 <span *ngIf="error">**{{error}}**</span>
 <div class="card">
 
-  <div class="messages" #scroll >
+  <div class="messages" #scroll>
 
-    <div *ngFor="let message of messages" [class.other]="user?.uid != message.uid" [class.me]="user?.uid === message.uid"
-      class="d-flex p-3 chat">
-      <span class="username">{{message.username}}</span>
-      <div class="message ml-2 p-3">{{message.message}}</div>
-      <span class="datetime">{{message.datetime}}</span>
+    <div *ngFor="let message of messages" [class.other]="user?.uid != message.data.uid"
+      [class.me]="user?.uid === message.data.uid" class="d-flex p-3 chat">
+      <span class="username">{{message.data.username}}</span>
+      <div class="message ml-2 p-3">{{message.data.message}}</div>
+      <!--
+
+        <span class="datetime">{{message.data.datetime}}</span>
+      -->
     </div>
 
 
