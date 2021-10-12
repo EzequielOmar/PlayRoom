@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 
 @Component({
@@ -14,9 +8,10 @@ import { Subscription, timer } from 'rxjs';
 })
 export class TimerComponent implements OnInit {
   @Input() counter!: number;
-  count: number = 0;
   @Output() gameOver: EventEmitter<Boolean> = new EventEmitter();
+  count: number = 0;
   countDown?: Subscription;
+  addSec: number = 0;
 
   constructor() {}
 
@@ -38,7 +33,11 @@ export class TimerComponent implements OnInit {
   }
 
   addSeconds(seconds: number) {
-    this.counter += seconds;
+    this.count += seconds;
+    this.addSec = seconds;
+    setTimeout(() => {
+      this.addSec = 0;
+    }, 1000);
   }
 
   ngOnDestroy() {

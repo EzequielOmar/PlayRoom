@@ -1,5 +1,6 @@
 export const missesAllowed = 5;
 export const timeAhorcado = 30;
+export const multiplyWordLengthBy = 3;
 export const  words = [
   'rails',
   'angularJS',

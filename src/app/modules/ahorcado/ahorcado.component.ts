@@ -8,7 +8,11 @@ import {
 } from '@angular/animations';
 import { AhorcadoService } from './ahorcado.service';
 import { TimerComponent } from '../shared/timer/timer.component';
-import { timeAhorcado } from './constants';
+import { multiplyWordLengthBy, timeAhorcado } from './constants';
+import { ScoreComponent } from '../shared/score/score.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { ScoreService } from 'src/app/services/score/score.service';
+import { DbService } from 'src/app/services/db/db.service';
 
 @Component({
   selector: 'app-ahorcado',
@@ -99,6 +103,7 @@ import { timeAhorcado } from './constants';
 })
 export class AhorcadoComponent implements OnInit {
   @ViewChild(TimerComponent) countDown: TimerComponent = new TimerComponent();
+  @ViewChild(ScoreComponent) score!: ScoreComponent;
   armR: Boolean = true;
   armL: Boolean = true;
   legR: Boolean = true;
@@ -168,7 +173,7 @@ export class AhorcadoComponent implements OnInit {
       return;
     }
     char.chosen = true;
-    if (this.hmc.try(char.name)) {
+    if (this.hmc.try(char.name) && !this.hmc.win) {
       this.countDown.addSeconds(5);
     }
     this.lost = this.hmc.lost;
@@ -178,6 +183,18 @@ export class AhorcadoComponent implements OnInit {
     }
     this.error = '';
     this.win = this.hmc.win;
+    if (this.win) this.handleWin();
+    if (this.lost) this.gameOver();
+  }
+
+  private handleWin() {
+    this.countDown.stop();
+    this.score.updateCurrentGameScore(
+      this.secretWord.length * multiplyWordLengthBy
+    );
+    setTimeout(() => {
+      this.score.saveTotalAndGameScore();
+    }, 2000);
   }
 
   private handleAnimation() {

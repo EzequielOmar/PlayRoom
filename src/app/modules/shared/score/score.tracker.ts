@@ -11,16 +11,19 @@ import {
 
 @Component({
   selector: 'number-tracker',
-  template: ` <span style="color:{{color}}"><strong>{{ currentNumber }}</strong></span> `,
+  template: `
+    <span style="color:{{ color }}"
+      ><strong>{{ currentNumber }}</strong></span
+    >
+  `,
   styleUrls: ['./score.component.scss'],
 })
-
 export class ScoreTrackerComponent {
   @Input() color = '';
   @Input() set end(endRange: string) {
     this._counterSub$.next(parseInt(endRange));
   }
-  @Input() countInterval = 20;
+  countInterval = 50;
   public currentNumber = 0;
   private _counterSub$ = new Subject();
   private _onDestroy$ = new Subject();

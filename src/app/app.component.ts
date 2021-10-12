@@ -8,7 +8,11 @@ import { AuthService } from './services/auth/auth.service';
 })
 export class AppComponent implements OnDestroy {
   title = 'SalaDeJuegos';
-  constructor() {}
+  constructor(private auth: AuthService) {
+    setInterval(() => {
+      console.log(this.auth.currentUser);
+    }, 3000);
+  }
 
   ngOnDestroy() {}
 }

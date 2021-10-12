@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { Score, Scores } from 'src/app/interfaces/score.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ScoreService } from 'src/app/services/score/score.service';
@@ -9,9 +9,10 @@ import { ScoreService } from 'src/app/services/score/score.service';
   styleUrls: ['./score.component.scss'],
 })
 export class ScoreComponent implements AfterViewInit {
+  @Input() game!: string;
   counterGameScore: number = 0;
   currentUserScore!: Score;
-  //uid: string | null;
+  inputScore: number = 0;
   constructor(private auth: AuthService, private score: ScoreService) {}
 
   ngAfterViewInit() {
@@ -19,23 +20,18 @@ export class ScoreComponent implements AfterViewInit {
     setTimeout(() => {
       this.getScore();
     }, 1000);
-    setTimeout(() => {
-      this.updateCurrentGameScore(15);
-    }, 5000);
-    setTimeout(() => {
-      this.updateCurrentGameScore(-5);
-    }, 10000);
-    setTimeout(() => {
-      this.lostCurrentGameScore();
-    }, 15000);
   }
 
   updateCurrentGameScore(score: number) {
     this.counterGameScore += score;
+    this.inputScore = score;
+    setTimeout(() => {
+      this.inputScore = 0;
+    }, 1000);
   }
 
   lostCurrentGameScore() {
-    this.counterGameScore = 0;
+    this.updateCurrentGameScore(this.counterGameScore * -1);
   }
 
   /**
@@ -45,8 +41,8 @@ export class ScoreComponent implements AfterViewInit {
    * @param game string con nombre del juego al que guardar score
    * ahorcado | mayoromenor | preguntados | sopadeletras
    */
-  saveTotalAndGameScore(game: string) {
-    switch (game) {
+  saveTotalAndGameScore() {
+    switch (this.game) {
       case 'ahorcado':
         this.currentUserScore.scores.ahorcado += this.counterGameScore;
         break;

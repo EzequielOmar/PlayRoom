@@ -5,10 +5,15 @@
     <span>Total</span>
   </div>
   <div>
-    <span [class.success]="counterGameScore"><strong *ngIf="counterGameScore">+</strong></span>
-    <number-tracker [color]="counterGameScore !== 0 && counterGameScore ? '#00db09':''"
-      [end]="counterGameScore.toString()">
-    </number-tracker>
+    <div class="acumulado">
+      <span [class.success]="counterGameScore"><strong *ngIf="counterGameScore">+</strong></span>
+      <number-tracker [color]="counterGameScore !== 0 && counterGameScore ? '#00db09':''"
+        [end]="counterGameScore.toString()">
+      </number-tracker>
+      <span [ngClass]="{'success' : inputScore >0,'negative':inputScore <0}" class="animationInput"
+        *ngIf="inputScore">{{inputScore}}</span>
+    </div>
+
     <span>Acum.</span>
   </div>
 </fieldset>

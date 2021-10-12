@@ -1,7 +1,7 @@
 .timer {
   text-align: center;
   max-width: 60px;
-  padding:  .45rem 0;
+  padding: 0.45rem 0;
   border-radius: 2rem;
   font-size: large;
   border: white 1.5px solid;
@@ -22,4 +22,12 @@
   100% {
     transform: scale(1);
   }
+}
+
+.animation {
+  position: relative;
+  top: -1.8rem;
+  left: -0.3rem;
+  font-size: smaller;
+  color: #00db09;
 }

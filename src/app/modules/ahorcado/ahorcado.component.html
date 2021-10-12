@@ -12,10 +12,6 @@
       </div>
     </div>
 
-    <div class="count">
-      <app-timer #countDown *ngIf="playing" [counter]="counter" (gameOver)="gameOver()"></app-timer>
-      <app-score></app-score>
-    </div>
 
     <div *ngIf="playing" class="ahorcado-imagen">
       <svg #man viewBox="0 -35 72 160" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -88,6 +84,12 @@
         </g>
       </svg>
     </div>
+
+    <div class="count row">
+      <app-timer #countDown *ngIf="playing" [counter]="counter" (gameOver)="gameOver()"></app-timer>
+      <app-score *ngIf="playing" [game]="'ahorcado'"></app-score>
+    </div>
+
 
     <div *ngIf="playing" class="game">
 

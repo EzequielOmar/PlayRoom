@@ -3,7 +3,7 @@
   //juego con imagen
   .ahorcado {
     //loby
-    .loby{
+    .loby {
       text-align: center;
       width: 100%;
     }
@@ -127,4 +127,12 @@ button {
   margin: 1rem;
   background: none;
   color: white;
+}
+
+.count {
+  align-self: end;
+  align-self: normal;
+  flex-wrap: wrap-reverse;
+  display: flex;
+  text-align:-webkit-center;
 }

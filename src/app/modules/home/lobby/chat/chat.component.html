@@ -1,20 +1,18 @@
-<span *ngIf="error">**{{error}}**</span>
 <div class="card">
 
   <div class="messages" #scroll>
-
-    <div *ngFor="let message of messages" [class.other]="user?.uid != message.data.uid"
+    <div *ngFor="let message of messages" [class.other]="user?.uid !== message.data.uid"
       [class.me]="user?.uid === message.data.uid" class="d-flex p-3 chat">
       <span class="username">{{message.data.username}}</span>
+      {{message.data.uid}}
       <div class="message ml-2 p-3">{{message.data.message}}</div>
       <!--
-
-        <span class="datetime">{{message.data.datetime}}</span>
-      -->
+      <span class="datetime">{{message.data.datetime}}</span>
+    -->
     </div>
-
-
   </div>
+
+  <span *ngIf="error">**{{error}}**</span>
 
   <div class="form-group px-3">
     <input type="text" class="form-control" placeholder="Mensaje..." #input (keyup.enter)="send(input.value)">
