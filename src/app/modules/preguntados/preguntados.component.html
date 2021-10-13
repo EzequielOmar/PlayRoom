@@ -2,38 +2,57 @@
 
   <div *ngIf="error">{{error}}</div>
 
-
+  <!--pantalla start, logo y boton-->
   <div *ngIf="!playing" class="logo">
     <div>
       <img src="/assets/wwtbami-logo.svg" alt="logo">
     </div>
     <div>
-      <button *ngIf="ready" (click)="startGame()" class="fill">Comenzar</button>
+      <button (click)="startGame()" class="fill">Comenzar</button>
     </div>
   </div>
 
+  <!--Mensajes y host-->
   <div class="playAgain">
     <div *ngIf="playing && (win||lost)">
-      <h3 *ngIf="win">¡Felicitaciones! Ganaste el acumulado.</h3>
-      <h3 *ngIf="lost">¡Incorrecto! El juego terminó.</h3>
-      <span>¿Quieres intentarlo de nuevo?</span>
+      <h3 *ngIf="win" class="green">¡Felicitaciones!<br> Ganaste el acumulado.</h3>
+      <h3 *ngIf="lost" class="red">¡Incorrecto! El juego terminó.</h3>
+      <span class="warning">¿Quieres intentarlo de nuevo?</span>
       <div>
-        <mat-icon (click)="startGame()" aria-hidden="false" aria-label="restart_alt icon">next_plan</mat-icon>
+        <button (click)="startGame()" class="fill">Si</button>
+        <button (click)="cancel()" class="fill">No</button>
       </div>
+    </div>
+    <div *ngIf="correct" class="correct">
+      <h3 class="green">¡Correcto!</h3>
+      <img src="assets/host.png" alt="host">
     </div>
   </div>
 
+  <!--tabla de premios-->
   <div *ngIf="playing" class="score">
     <ul>
-      <li [ngClass]="{'earned' : s.earned,'current' : s.current}" *ngFor="let s of scores">
+      <li [ngClass]="{'earned' : s.earned,'current' : s.current,'base':s.savePoint}" *ngFor="let s of scores">
         {{s.score}}
       </li>
     </ul>
   </div>
 
   <div *ngIf="currentQuestion && playing" class="pregunta">
-    <mat-icon *ngIf="guess && !win && !lost" (click)="next()" aria-hidden="false" aria-label="restart_alt icon">
-      next_plan</mat-icon>
+    <!--Score Timer Buttons-->
+    <div class="buttons">
+      <app-timer #countDown *ngIf="playing" [counter]="counter" (gameOver)="timeOut()"></app-timer>
+      <app-score [game]="gamename"></app-score>
+      <div *ngIf="!win && !lost">
+        <div>
+          <mat-icon (click)="cancel();" aria-hidden="false" aria-label="restart_alt icon" data-toggle="tooltip"
+            data-placement="left" title="Terminar el juego">cancel</mat-icon>
+        </div>
+        <mat-icon *ngIf="guess" (click)="next()" aria-hidden="false" aria-label="restart_alt icon" data-toggle="tooltip"
+          data-placement="left" title="Siguiente Pregunta">
+          next_plan</mat-icon>
+      </div>
+    </div>
     <!--Pregunta-->
     <div class="box" style="max-width:80%">
       <strong>Pregunta:</strong>
@@ -41,11 +60,10 @@
     </div>
     <!--Opciones-->
     <div (click)="try(option)" class="box question" style="width:39%"
-      *ngFor="let option of currentQuestion.incorrect_answers;let i = index" >
+      *ngFor="let option of currentQuestion.incorrect_answers;let i = index">
       <strong>{{options[i]}}:</strong>
       <p>{{option}}</p>
     </div>
-
   </div>
 
 </div>

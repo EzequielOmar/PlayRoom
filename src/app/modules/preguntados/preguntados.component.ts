@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { scores } from './constants';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ScoreComponent } from '../shared/score/score.component';
+import { TimerComponent } from '../shared/timer/timer.component';
+import { scores, timePreguntados } from './constants';
 import { Question } from './pregunta';
 import { PreguntadosService } from './preguntados.service';
 
@@ -8,33 +10,30 @@ import { PreguntadosService } from './preguntados.service';
   templateUrl: './preguntados.component.html',
   styleUrls: ['./preguntados.component.scss'],
 })
-export class PreguntadosComponent implements OnInit {
+export class PreguntadosComponent {
+  gamename: string = 'preguntados';
+  @ViewChild(TimerComponent) countDown: TimerComponent = new TimerComponent();
+  @ViewChild(ScoreComponent) score!: ScoreComponent;
   private questions: Array<Question> = [];
   options: Array<string> = ['A', 'B', 'C', 'D'];
   questionNro: number = 0;
+  counter: number = 0;
   currentQuestion: Question | null = null;
-  error: string = '';
   playing: Boolean = false;
+  correct: Boolean = false;
   win: Boolean = false;
   lost: Boolean = false;
-  ready: Boolean = false;
   guess: Boolean = false;
+  error: string = '';
   scores: Array<any> = JSON.parse(JSON.stringify(scores));
   constructor(private trivia: PreguntadosService) {}
 
-  ngOnInit(): void {
-    this.getQuestions();
-  }
-
   startGame() {
-    if (this.win || this.lost) {
+    this.getQuestions().then(() => {
       this.initialice();
-      this.getQuestions();
-    }
-    setTimeout(() => {
       this.playing = true;
       this.setNextQuestion();
-    }, 500);
+    });
   }
 
   try(option: string) {
@@ -42,16 +41,33 @@ export class PreguntadosComponent implements OnInit {
       this.error = 'El juego terminó. ¡Intentelo de nuevo!';
       return;
     }
+    this.countDown.stop();
     this.check(option);
+    this.handleScore();
   }
 
   next() {
     this.guess = false;
+    this.countDown.start();
     this.setNextQuestion();
   }
 
+  timeOut() {
+    this.error = 'Se terminó el tiempo';
+    this.lost = true;
+    this.countDown.stop();
+  }
+
+  cancel() {
+    if (this.win || this.lost) {
+      this.playing = false;
+      return;
+    }
+    if (confirm('¿Seguro? Perderás los puntos acumulados.'))
+      this.playing = false;
+  }
+
   private initialice() {
-    this.ready = false;
     this.questionNro = 0;
     this.currentQuestion = null;
     this.error = '';
@@ -60,23 +76,27 @@ export class PreguntadosComponent implements OnInit {
     this.lost = false;
     this.guess = false;
     this.scores = JSON.parse(JSON.stringify(scores));
+    this.counter = timePreguntados;
+    // this.score.lostCurrentGameScore;
+    //start counter
+    setTimeout(() => {
+      this.countDown.start();
+    }, 500);
   }
 
   /**
    *Consigue las 9 preguntas del juego o muestra error
    */
-  private getQuestions() {
-    this.trivia
+  private getQuestions = async () =>
+    await this.trivia
       .getQuestions()
       .then((res) => {
         this.questions = [];
         this.questions.push(...res);
-        this.ready = true;
       })
       .catch((e) => {
         this.error = e.message;
       });
-  }
 
   private setNextQuestion() {
     this.scores[this.questionNro].current = true;
@@ -86,19 +106,31 @@ export class PreguntadosComponent implements OnInit {
 
   private check(option: string) {
     if (this.guess) {
-      this.error = 'Lo siento, ya arriesgó, no puede cambiar su desición.';
+      this.error =
+        'Su respuesta es correcta. Presione la flecha y continúe el juego.';
       return;
     }
     this.guess = true;
     if (option === this.currentQuestion?.correct_answer) {
-      if (this.questionNro === this.questions.length) {
+      //correcta
+      this.runCorrectAnimation();
+      if (this.questionNro === this.questions.length)
+        //ganador
         this.win = true;
-        return;
-      }
-    } else {
-      this.lost = true;
     }
+    //error perdió
+    else this.lost = true;
     this.updateDom(option);
+  }
+
+  private handleScore() {
+    if (this.lost) {
+      this.score.lostCurrentGameScore();
+      return;
+    }
+    this.score.updateCurrentGameScore(this.scores[this.questionNro - 1].score);
+    if (this.scores[this.questionNro - 1].savePoint)
+      this.score.saveTotalAndGameScore();
   }
 
   private updateDom(option: string) {
@@ -123,5 +155,11 @@ export class PreguntadosComponent implements OnInit {
         d.className = 'box';
       }
     });
+  }
+  runCorrectAnimation() {
+    this.correct = true;
+    setTimeout(() => {
+      this.correct = false;
+    }, 2000);
   }
 }

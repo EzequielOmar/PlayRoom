@@ -14,11 +14,11 @@
 .logo {
   div {
     img {
-      width: 25%;
       min-width: 200px;
       animation-name: beat;
       animation-duration: 2s;
       cursor: pointer;
+      width: 25%;
     }
     width: 100%;
   }
@@ -31,9 +31,12 @@
 }
 
 .playAgain {
-  mat-icon{
+  * {
+    padding: 0.2rem;
+    margin: 0.2rem;
+  }
+  mat-icon {
     font-size: xx-large;
-    margin: 1rem;
   }
   position: absolute;
   top: 5%;
@@ -88,16 +91,35 @@
   background: #dea53dba;
   border-radius: 20px;
 }
+.base::after {
+  content: "BASE";
+  font-size: small;
+  float: right;
+  position: absolute;
+  left: 8.3rem;
+  top: 0.2rem;
+  text-decoration: underline;
+  color: #078407d1;
+  font-weight: 500;
+}
+.base:last-child:after {
+  content: "POZO" !important;
+}
 
 .pregunta {
-  //aca van 5 .box clases con la pregunta
+  .buttons {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+  }
   mat-icon {
-    width: 70%;
     text-align: end;
-    font-size: xxx-large;
-    height: auto;
+    font-size: xx-large;
     cursor: pointer;
-    color: #94cecb;
+    color: #ffffff;
+    margin: ​1rem !important;
   }
   width: 100%;
   max-width: 600px;
@@ -167,4 +189,33 @@
   box-shadow: inset 0 0 0 2em var(adjust-hue(#a972cb, 45deg));
   background: #a972cb;
   transition: 2s;
+}
+
+.warning {
+  color: #cea458c4;
+}
+
+.red {
+  color: #9f0d0d;
+  font-weight: 700;
+  font-size: x-large;
+}
+
+.green {
+  color: #078407d1;
+  font-weight: 700;
+  font-size: x-large;
+}
+
+.correct {
+  img {
+    transform: rotate(-14.5deg);
+    position: relative;
+    left: 5rem;
+    top: 1rem;
+    max-width: 60%;
+    @include sm {
+      max-width: 100%;
+    }
+  }
 }

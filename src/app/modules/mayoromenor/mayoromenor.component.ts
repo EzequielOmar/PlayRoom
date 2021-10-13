@@ -32,7 +32,7 @@ import { ScoreComponent } from '../shared/score/score.component';
     ]),
   ],
 })
-export class MayoromenorComponent implements OnInit, OnDestroy {
+export class MayoromenorComponent implements OnInit {
   gamename: string = 'mayoromenor';
   @ViewChild(TimerComponent) countDown: TimerComponent = new TimerComponent();
   @ViewChild(ScoreComponent) score!: ScoreComponent;
@@ -146,9 +146,5 @@ export class MayoromenorComponent implements OnInit, OnDestroy {
 
   private addGuessScore() {
     this.score.updateCurrentGameScore(guessScore);
-  }
-
-  ngOnDestroy() {
-    this.countDown.ngOnDestroy();
   }
 }
