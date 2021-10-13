@@ -32,6 +32,11 @@ export class TimerComponent implements OnInit {
     this.countDown?.unsubscribe();
   }
 
+  reboot() {
+    this.stop();
+    this.start();
+  }
+
   addSeconds(seconds: number) {
     this.count += seconds;
     this.addSec = seconds;

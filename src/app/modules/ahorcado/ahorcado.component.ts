@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   trigger,
   state,
@@ -101,7 +101,8 @@ import { DbService } from 'src/app/services/db/db.service';
     ]),
   ],
 })
-export class AhorcadoComponent implements OnInit {
+export class AhorcadoComponent implements OnInit, OnDestroy {
+  gamename: string = 'ahorcado';
   @ViewChild(TimerComponent) countDown: TimerComponent = new TimerComponent();
   @ViewChild(ScoreComponent) score!: ScoreComponent;
   armR: Boolean = true;
@@ -216,5 +217,9 @@ export class AhorcadoComponent implements OnInit {
     setTimeout(() => {
       this.animation = false;
     }, 1000);
+  }
+
+  ngOnDestroy() {
+    this.countDown.ngOnDestroy();
   }
 }

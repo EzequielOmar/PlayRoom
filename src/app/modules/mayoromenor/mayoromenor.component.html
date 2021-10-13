@@ -1,25 +1,60 @@
 <div class="mayoromenor">
 
-  <h2>Toque el mazo para iniciar el juego!</h2>
-  <span>Error: {{error}}</span>
-  <span>Score: {{points}}</span>
-  <span>Prev Card: {{prevCard}}</span>
-  <span>Curent Card: {{currentCard}}</span>
+  <div class="message">
+    <div *ngIf="win">
+      <h3>Increíble pero ganaste</h3>
+      <span>toma toma, llevate todos los puntos.</span>
+    </div>
+    <h3 *ngIf="even">{{even}}</h3>
+    <div *ngIf="loos">
+      <span>¡El juego terminó!</span>
+      <span>{{error}}</span>
+    </div>
+  </div>
+
 
   <div class="card-container">
-    <div class="card" (click)="initGame()" [@cardFlip]="cardState">
+
+    <!--PrevCard-->
+    <div *ngIf="prevCard &&(win||loos)">
+      <h4 style="margin: 1rem 2rem 0 0;">Carta anterior</h4>
+      <div class="card prev">
+        <div class="face">
+          <img *ngIf="playing && cardState ==='default'" [src]="prevCardImage" alt="poker card">
+        </div>
+      </div>
+    </div>
+
+    <!--CurrentCard-->
+    <div class="card" [@cardFlip]="cardState">
       <div class="face">
         <img *ngIf="!playing" src="assets/cards/back-poker-card.png" alt="poker back card">
-        <img *ngIf="playing && cardState ==='default'" [src]= "cardImage" alt="poker card">
+        <img *ngIf="playing && cardState ==='default'" [src]="currentCardImage" alt="poker card">
       </div>
       <div class="face front">
       </div>
     </div>
 
   </div>
-  <div class="buttons">
-    <input type="button" value="Mayor" (click)="try('mayor')">
-    <input type="button" value="Menor" (click)="try('menor')">
+
+  <div *ngIf="playing;else startButton" class="buttons">
+
+    <app-score [game]="gamename"></app-score>
+    <div *ngIf="!(win||loos); else playAgain" class="row">
+      <input type="button" value="Menor" (click)="try('menor')">
+      <app-timer #countDown *ngIf="playing" [counter]="counter" (gameOver)="timeOut()"></app-timer>
+      <input type="button" value="Mayor" (click)="try('mayor')">
+    </div>
+
   </div>
 
 </div>
+
+<ng-template #startButton>
+  <a (click)="initGame()">Comenzar</a>
+</ng-template>
+
+<ng-template #playAgain>
+  <a (click)="initGame()">Jugar De Nuevo</a>
+  <a (click)="cancel()">Cancelar</a>
+</ng-template>

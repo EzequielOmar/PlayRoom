@@ -46,7 +46,7 @@ export class ScoreComponent implements AfterViewInit {
       case 'ahorcado':
         this.currentUserScore.scores.ahorcado += this.counterGameScore;
         break;
-      case 'mayoomenor':
+      case 'mayoromenor':
         this.currentUserScore.scores.mayoromenor += this.counterGameScore;
         break;
       case 'preguntados':

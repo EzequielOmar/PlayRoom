@@ -87,7 +87,7 @@
 
     <div class="count row">
       <app-timer #countDown *ngIf="playing" [counter]="counter" (gameOver)="gameOver()"></app-timer>
-      <app-score *ngIf="playing" [game]="'ahorcado'"></app-score>
+      <app-score *ngIf="playing" [game]="gamename"></app-score>
     </div>
 
 
