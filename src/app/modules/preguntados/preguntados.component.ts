@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ScoreComponent } from '../shared/score/score.component';
 import { TimerComponent } from '../shared/timer/timer.component';
 import { scores, timePreguntados } from './constants';
@@ -156,6 +156,7 @@ export class PreguntadosComponent {
       }
     });
   }
+
   runCorrectAnimation() {
     this.correct = true;
     setTimeout(() => {

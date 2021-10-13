@@ -1,5 +1,6 @@
 <div class="game">
 
+  <!--Start page-->
   <div *ngIf="!playing" class="start">
     <div class="row">
       <div *ngFor="let char of 'SOPADELETRAS'.split(''); let even = even" class="cell" [class.selected]="even">
@@ -7,32 +8,29 @@
           {{char}}
         </span>
       </div>
-      <button *ngIf="ready" (click)="startGame()">Comenzar</button>
+      <button (click)="startGame()">Comenzar</button>
     </div>
   </div>
 
+  <!--game messages-->
   <div *ngIf="(win || lost) && playing" class="message">
-    <h3 style="color:#40b91a80" *ngIf="win">¡Felicitaciones!</h3>
-    <strong style="color:#40b91a80" *ngIf="win">*Rompecabezas completado, presione el botón para reiniciar*</strong>
-    <h3 style="color:#e80909ad" *ngIf="lost">¡Juego terminado!</h3>
-    <strong style="color:#e80909ad" *ngIf="lost">*Se acabó el tiempo, presione el botón para reiniciar*</strong>
-    <mat-icon (click)="startGame()" aria-hidden="false" aria-label="restart_alt icon">restart_alt
-    </mat-icon>
-    <mat-icon (click)="cancel()" aria-hidden="false" aria-label="restart_alt icon">cancel
-    </mat-icon>
+    <div *ngIf="win">
+      <h3 class="green">¡Felicitaciones!</h3>
+      <strong class="green">*Rompecabezas completado*</strong>
+    </div>
+    <h3 class="red" *ngIf="lost">¡Juego terminado!</h3>
+    <span class="warning">¿Quieres intentarlo de nuevo?</span>
+    <div>
+      <button (click)="startGame()" class="fill">Si</button>
+      <button (click)="cancel()" class="fill">No</button>
+    </div>
   </div>
 
-  <app-timer *ngIf="playing" [counter]="counter" (gameOver)="gameOver()"></app-timer>
+  <!--Pausado-->
+  <h3 *ngIf="stop" class="warning">¡Pausado!</h3>
 
-  <div *ngIf="playing" class="wordsGuessed">
-    <ul *ngFor="let word of guessedWords">
-      <li>
-        {{word}}
-      </li>
-    </ul>
-  </div>
-
-  <div *ngIf="soup && playing" class="soup" #soupContainer>
+  <!--Soup-->
+  <div *ngIf="soup && playing && !(win||lost) && !stop" class="soup" #soupContainer>
     <div class="row" *ngFor="let row of soup;let i = index">
       <div #cell draggable="true" (dragover)="drag(i,j)" (dragend)="drop()" class="cell"
         *ngFor="let cell of row;let j = index">
@@ -41,4 +39,34 @@
     </div>
   </div>
 
+  <!--guessed words list / timer-score-->
+  <div *ngIf="playing" class="wordsGuessed">
+
+    <div class="buttons">
+
+      <mat-icon *ngIf="!stop; else playButton" (click)="pause();" data-toggle="tooltip" data-placement="left"
+        title="Pausar el juego">
+        pause_circle_outline
+      </mat-icon>
+
+      <app-timer *ngIf="playing" [counter]="counter" (gameOver)="gameOver()"></app-timer>
+      <app-score [game]="gamename"></app-score>
+      <mat-icon (click)="cancel();" data-toggle="tooltip" data-placement="left" title="Terminar el juego">cancel
+      </mat-icon>
+    </div>
+
+    <h3>Encontradas:</h3>
+
+    <ul>
+      <li *ngFor="let word of guessedWords">
+        {{word}}
+      </li>
+    </ul>
+  </div>
+
 </div>
+
+<ng-template #playButton>
+  <mat-icon (click)="pause()" aria-hidden="false" aria-label="restart_alt icon"
+    data-toggle="tooltip" data-placement="left" title="Reanudar el juego">play_circle_outline</mat-icon>
+</ng-template>

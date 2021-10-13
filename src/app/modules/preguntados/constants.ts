@@ -11,4 +11,4 @@ export const scores = [
   { score: 10000, earned: false, current: false, savePoint: true },
 ];
 
-export const timePreguntados = 100;
+export const timePreguntados = 20;

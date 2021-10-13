@@ -20,12 +20,7 @@ export class TimerComponent implements OnInit {
   start() {
     //start count down
     this.count = this.counter;
-    this.countDown = timer(1000, 1000).subscribe(() => {
-      --this.count;
-      if (this.count == 0) {
-        this.gameOver.emit(true);
-      }
-    });
+    this.unpause();
   }
 
   stop() {
@@ -37,15 +32,28 @@ export class TimerComponent implements OnInit {
     this.start();
   }
 
+  unpause() {
+    this.countDown = timer(1000, 1000).subscribe(() => {
+      --this.count;
+      if (this.count == 0) {
+        this.gameOver.emit(true);
+      }
+    });
+  }
+
   addSeconds(seconds: number) {
     this.count += seconds;
-    this.addSec = seconds;
-    setTimeout(() => {
-      this.addSec = 0;
-    }, 1000);
+    this.addSecondsAnimation(seconds);
   }
 
   ngOnDestroy() {
     this.countDown?.unsubscribe();
+  }
+
+  private addSecondsAnimation(seconds: number) {
+    this.addSec = seconds;
+    setTimeout(() => {
+      this.addSec = 0;
+    }, 1000);
   }
 }

@@ -1,12 +1,13 @@
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { ScoreComponent } from '../shared/score/score.component';
+import { TimerComponent } from '../shared/timer/timer.component';
 import {
-  Component,
-  ElementRef,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
-import { Subscription, timer } from 'rxjs';
-import { bonusGuessedWord, timeSoup, words, wordsBySoup } from './constants';
+  bonusGuessedWord,
+  multiplierWordLengthScore,
+  timeSoup,
+  words,
+  wordsBySoup,
+} from './constants';
 declare var WordFind: any;
 
 @Component({
@@ -14,8 +15,11 @@ declare var WordFind: any;
   templateUrl: './sopadeletras.component.html',
   styleUrls: ['./sopadeletras.component.scss'],
 })
-export class SopadeletrasComponent implements OnInit {
+export class SopadeletrasComponent {
+  gamename: string = 'sopadeletras';
   @ViewChild('soupContainer') soupContainer?: ElementRef;
+  @ViewChild(TimerComponent) countDown: TimerComponent = new TimerComponent();
+  @ViewChild(ScoreComponent) score!: ScoreComponent;
   soup: Array<Array<string>> | null = null;
   words: Array<string> = [];
   guessedWords: Array<string> = [];
@@ -23,34 +27,35 @@ export class SopadeletrasComponent implements OnInit {
   dragWord: string = '';
   win: Boolean = false;
   lost: Boolean = false;
-  ready: Boolean = false;
   playing: Boolean = false;
-  countDown?: Subscription;
+  stop: Boolean = false;
   counter: number = timeSoup;
   constructor(private renderer: Renderer2) {}
 
-  ngOnInit(): void {
-    this.soup = this.getSoup();
-  }
-
   startGame() {
-    if (this.win || this.lost) {
-      this.initialice();
-      this.soup = this.getSoup();
-    }
-    setTimeout(() => {
-      this.playing = true;
-      //start counter
-      this.countDown = timer(1000, 1000).subscribe(() => --this.counter);
-    }, 500);
+    this.initialice();
+    this.soup = this.getSoup();
+    this.playing = true;
   }
 
   gameOver() {
     this.lost = true;
+    this.countDown.stop();
+    this.saveScore();
   }
 
   cancel() {
-    this.playing = false;
+    if (this.win || this.lost) {
+      this.playing = false;
+      return;
+    }
+    if (confirm('¿Seguro? Perderás los puntos acumulados.'))
+      this.playing = false;
+  }
+
+  pause() {
+    this.stop ? this.countDown.unpause() : this.countDown.stop();
+    this.stop = !this.stop;
   }
 
   /**
@@ -61,9 +66,7 @@ export class SopadeletrasComponent implements OnInit {
   drag(i: number, j: number) {
     let dragCell = this.soupContainer?.nativeElement.children[i].children[j];
     dragCell.classList.add('selected');
-    if (!this.dragElements.includes(dragCell)) {
-      this.dragElements.push(dragCell);
-    }
+    if (!this.dragElements.includes(dragCell)) this.dragElements.push(dragCell);
   }
 
   /**
@@ -79,11 +82,11 @@ export class SopadeletrasComponent implements OnInit {
       this.dragWord += e.innerText;
     });
     //chequea si la palabra es correcta, y luego si el juego terminó
-    if (this.checkWord()) {
-      if (this.gameEnd()) {
+    if (this.checkWord())
+      if (this.words.length === 0) {
         this.win = true;
+        this.saveScore();
       }
-    }
     //vacía el array de divs seleccionados
     this.dragElements = [];
   }
@@ -96,9 +99,13 @@ export class SopadeletrasComponent implements OnInit {
     this.dragWord = '';
     this.win = false;
     this.lost = false;
-    this.ready = false;
     this.playing = false;
     this.counter = timeSoup;
+    this.stop = false;
+    //start counter
+    setTimeout(() => {
+      this.countDown.start();
+    }, 500);
   }
 
   private getSoup(): Array<Array<string>> {
@@ -118,7 +125,6 @@ export class SopadeletrasComponent implements OnInit {
         'diagonalUpBack',
       ],
     });
-    this.ready = true;
     return puzzle;
   }
 
@@ -142,6 +148,7 @@ export class SopadeletrasComponent implements OnInit {
    * remueve la plabra adivinada de words
    * actualiza las clases del DOM
    * suma bonusGuessedWord al timer
+   * suma el score al acumulado del juego
    * @param index index de la palabra encontrada en el aray words (chequeada distinta de -1)
    */
   private correct(index: number) {
@@ -150,7 +157,10 @@ export class SopadeletrasComponent implements OnInit {
     this.dragElements.forEach((e: any) => {
       this.renderer.addClass(e, 'correct');
     });
-    this.counter += bonusGuessedWord;
+    this.countDown.addSeconds(bonusGuessedWord);
+    this.score.updateCurrentGameScore(
+      this.dragWord.length * multiplierWordLengthScore
+    );
   }
 
   /**
@@ -165,7 +175,9 @@ export class SopadeletrasComponent implements OnInit {
     });
   }
 
-  private gameEnd(): Boolean {
-    return this.words.length === 0;
+  private saveScore() {
+    setTimeout(() => {
+      this.score.saveTotalAndGameScore();
+    }, 2000);
   }
 }

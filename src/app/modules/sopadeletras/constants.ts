@@ -126,5 +126,6 @@ export const words = [
   'zip',
 ];
 export const wordsBySoup = 15;
-export const timeSoup = 60;
+export const timeSoup = 100;
 export const bonusGuessedWord = 5;
+export const multiplierWordLengthScore = 3;

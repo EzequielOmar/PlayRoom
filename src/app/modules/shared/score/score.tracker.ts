@@ -23,7 +23,7 @@ export class ScoreTrackerComponent {
   @Input() set end(endRange: string) {
     this._counterSub$.next(parseInt(endRange));
   }
-  countInterval = 50;
+  countInterval = 25;
   public currentNumber = 0;
   private _counterSub$ = new Subject();
   private _onDestroy$ = new Subject();
