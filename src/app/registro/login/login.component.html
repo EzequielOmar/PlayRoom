@@ -40,7 +40,8 @@
       <!--send-->
       <input type="submit" class="fadeIn third mb-4" value="Entrar">
       <!--llenar datos usuario publico-->
-      <a style="width: 100%; font-weight: 600;" (click)="fillForm()">Entrá como invitado</a>
+      <a style="width: 100%; font-weight: 600;" (click)="fillForm('user')">Entrá como invitado</a>
+      <a style="width: 100%; font-weight: 600;" (click)="fillForm('admin')">Entrá como admin</a>
       <!-- Remind Password -->
       <a class="underlineHover" (click)=goToRecovery()>¿Olvidaste la constraseña?</a>
     </form>

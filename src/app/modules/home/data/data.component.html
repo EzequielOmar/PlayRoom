@@ -1,0 +1,20 @@
+<div class="container">
+
+  <!--Comentarios-->
+  <ul class="col-4 p-0 mt-5">
+    <div *ngFor="let s of surveys">
+      <li *ngIf="s.data.suggestion" class="list-group-item d-flex justify-content-between
+        align-items-center lh-condensed">
+        <blockquote>
+          <p class="text-dark">{{s.data.suggestion}}</p>
+          <footer>
+            <strong class="text-capitalize">
+              — {{s.data.lastName}}, {{s.data.name}}
+            </strong>
+          </footer>
+        </blockquote>
+      </li>
+    </div>
+  </ul>
+
+</div>

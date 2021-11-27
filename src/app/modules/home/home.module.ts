@@ -11,10 +11,24 @@ import { MaterialModule } from 'src/app/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SurveyComponent } from './survey/survey.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DataComponent } from './data/data.component';
 
 @NgModule({
-  imports: [CommonModule, HomeRoutingModule, MaterialModule,ReactiveFormsModule,NgbModule],
-  declarations: [HomeComponent, LobbyComponent, ChatComponent, NavComponent, SurveyComponent],
+  imports: [
+    CommonModule,
+    HomeRoutingModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    NgbModule,
+  ],
+  declarations: [
+    HomeComponent,
+    LobbyComponent,
+    ChatComponent,
+    NavComponent,
+    SurveyComponent,
+    DataComponent,
+  ],
   exports: [],
 })
 export class HomeModule {}

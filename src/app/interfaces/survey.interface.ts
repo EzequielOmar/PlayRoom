@@ -9,3 +9,8 @@ export interface Survey {
   hoursPerDay: string; //0.25 a 8 hs al dia
   suggestion: string; //mensaje opcional
 }
+
+export interface SurveyId {
+  uid: string;
+  data: Survey;
+}

@@ -8,6 +8,8 @@ import {
 import { AboutMeComponent } from './about-me/about-me.component';
 import { HomeComponent } from './home.component';
 import { LobbyComponent } from './lobby/lobby.component';
+import { UserTypeGuardService } from 'src/app/services/userTypeGuard/user-type-auth.service';
+import { UserProfileType } from 'src/app/interfaces/user.interface';
 
 const redirectUnauthorizedToLogin = () =>
   redirectUnauthorizedTo(['/auth/login']);
@@ -63,6 +65,16 @@ const routes: Routes = [
           import('../sopadeletras/sopadeletras.module').then(
             (m) => m.SopadeletrasModule
           ),
+        outlet: 'menuList',
+      },
+      {
+        path: 'data',
+        canActivate: [UserTypeGuardService],
+        data: {
+          expectedType: UserProfileType.admin,
+        },
+        loadChildren: () =>
+          import('./data/data.module').then((m) => m.DataModule),
         outlet: 'menuList',
       },
     ],

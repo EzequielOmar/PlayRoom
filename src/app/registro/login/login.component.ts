@@ -69,9 +69,14 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  fillForm() {
-    this.form.controls['email'].setValue('public@saladejuegos.com');
-    this.form.controls['pass'].setValue('public');
+  fillForm(type: string) {
+    if (type === 'admin') {
+      this.form.controls['email'].setValue('admin@saladejuegos.com');
+      this.form.controls['pass'].setValue('admin1');
+    } else {
+      this.form.controls['email'].setValue('public@saladejuegos.com');
+      this.form.controls['pass'].setValue('public');
+    }
   }
 
   goToSignup() {
