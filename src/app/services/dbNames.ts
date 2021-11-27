@@ -3,4 +3,5 @@ export const databases = {
   logs: 'logs',
   chat: 'chat',
   score: 'score',
+  survey:'surveys'
 };

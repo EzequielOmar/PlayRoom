@@ -1,0 +1,159 @@
+<div class="modal-body">
+  <!-- Survey Form -->
+  <form [formGroup]="form" (ngSubmit)="sendSurvey()">
+    <div class="row p-2">
+      <!--Nombre-->
+      <div class="form-group col-6">
+        <label for="name">Nombre</label>
+        <input pattern="[a-zA-Z]*" minlength=2 maxlength=40 formControlName="name" required type="text"
+          placeholder="Nombre Completo" class="form-control">
+        <span *ngIf="form.controls['name'].errors?.required && (submitted || form.controls['name'].touched)">
+          Por favor, ingrese su nombre.
+        </span>
+        <div
+          *ngIf="form.controls['name'].errors?.minlength && (submitted || form.controls['name'].touched); then minError">
+        </div>
+        <div
+          *ngIf="form.controls['name'].errors?.maxlength && (submitted || form.controls['name'].touched); then maxError">
+        </div>
+        <div
+          *ngIf="form.controls['name'].errors?.pattern && (submitted || form.controls['name'].touched); then patError">
+        </div>
+      </div>
+      <!--Apellido-->
+      <div class="form-group  col-6">
+        <label for="lastName">Apellido</label>
+        <input pattern="[a-zA-Z]*" minlength=2 maxlength=40 formControlName="lastName" required type="text"
+          placeholder="Apellido" class="form-control">
+        <span *ngIf="form.controls['lastName'].errors?.required && (submitted || form.controls['lastName'].touched)">
+          Por favor, ingrese su apellido.
+        </span>
+        <div
+          *ngIf="form.controls['lastName'].errors?.minlength && (submitted || form.controls['lastName'].touched); then minError">
+        </div>
+        <div
+          *ngIf="form.controls['lastName'].errors?.maxlength && (submitted || form.controls['lastName'].touched); then maxError">
+        </div>
+        <div
+          *ngIf="form.controls['lastName'].errors?.pattern && (submitted || form.controls['lastName'].touched); then patError">
+        </div>
+      </div>
+    </div>
+    <div class="row p-2">
+      <!--birthDate-->
+      <div class="form-group col-4">
+        <label for="birthDate">Fecha de nacimiento</label>
+        <div class="input-group date">
+          <input [minDate]="getMinDate()" [maxDate]="getMaxDate()" formControlName="birthDate" required
+            class="form-control" placeholder="yyyy-mm-dd" type="text" name="dp" ngbDatepicker #dp="ngbDatepicker">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button">
+              <mat-icon aria-hidden="false" aria-label="account icon">event</mat-icon>
+            </button>
+          </div>
+        </div>
+        <span
+          *ngIf="form.controls['birthDate'].errors?.ngbDate.minDate && (submitted || form.controls['birthDate'].touched)">
+          Los mayores de {{maxAge}} no deberían estar jugando a esto.
+        </span>
+        <span
+          *ngIf="form.controls['birthDate'].errors?.ngbDate.maxDate && (submitted || form.controls['birthDate'].touched)">
+          Nuestros juegos no pueden jugarlos menores de {{minAge}} años.
+        </span>
+      </div>
+      <!--cell-->
+      <div class="form-group col-4">
+        <label for="cell">Número de Contacto</label>
+        <input pattern="[0-9]*" minlength=8 maxlength=12 formControlName="cell" required type="tel"
+          placeholder="011XXXXXXXX" class="form-control">
+        <span *ngIf="form.controls['cell'].errors?.required && (submitted || form.controls['cell'].touched)">
+          Por favor, ingrese su número de teléfono.
+        </span>
+        <div
+          *ngIf="form.controls['cell'].errors?.minlength && (submitted || form.controls['cell'].touched); then minError">
+        </div>
+        <div
+          *ngIf="form.controls['cell'].errors?.maxlength && (submitted || form.controls['cell'].touched); then maxError">
+        </div>
+        <div
+          *ngIf="form.controls['cell'].errors?.pattern && (submitted || form.controls['cell'].touched); then patError">
+        </div>
+      </div>
+      <!--country-->
+      <div class="form-group col-4">
+        <label for="country">Nacionalidad</label>
+        <input pattern="[a-zA-Z]*" minlength=2 maxlength=40 formControlName="country" required type="text"
+          placeholder="País" class="form-control">
+        <span *ngIf="form.controls['country'].errors?.required && (submitted || form.controls['country'].touched)">
+          Por favor, cuéntenos de dónde viene.
+        </span>
+        <div
+          *ngIf="form.controls['country'].errors?.minlength && (submitted || form.controls['country'].touched); then minError">
+        </div>
+        <div
+          *ngIf="form.controls['country'].errors?.maxlength && (submitted || form.controls['country'].touched); then maxError">
+        </div>
+        <div
+          *ngIf="form.controls['country'].errors?.pattern && (submitted || form.controls['country'].touched); then patError">
+        </div>
+      </div>
+    </div>
+    <!--survey-->
+    <div class="row p-2">
+      <!--Dias/Horas de juego-->
+      <div class="form-group col-6">
+        <label for="daysPerWeek">Días por semana que juega</label>
+        <br>
+        <span class="text-success">
+          {{form.controls['daysPerWeek'].value}} días
+        </span>
+        <input formControlName="daysPerWeek" type="range" class="custom-range col-12" min="1" max="7" step="1">
+        <label for="hoursPerDay">Horas por día que juega</label>
+        <br>
+        <span class="text-success">
+          {{form.controls['hoursPerDay'].value}} horas
+        </span>
+        <input formControlName="hoursPerDay" type="range" class="custom-range col-12" min="0.25" max="8" step="0.25">
+      </div>
+      <!--Juego favorito-->
+      <div class="form-group col-6">
+        <label for="fav_game">¿Qué juego disfrutó mas?</label>
+        <select formControlName="fav_game" required class="form-control custom-select">
+          <option value="ahorcado">Ahorcado</option>
+          <option value="mayoromenor">Mayor o Menor</option>
+          <option value="preguntados">Preguntados</option>
+          <option value="sopadeletras">Sopa de Letras</option>
+        </select>
+        <span *ngIf="form.controls['fav_game'].errors?.required && (submitted || form.controls['fav_game'].touched)">
+          Por favor, elija su juego favorito.
+        </span>
+      </div>
+    </div>
+    <div class="form-group mb-3">
+      <label for="suggestion">Compartí tu opinión</label>
+      <textarea formControlName="suggestion" class="form-control"
+        placeholder=" Usá este espacio para contarnos como fue tu experiencia, compartir sugerencias, o reportar fallas."></textarea>
+    </div>
+    <!--send-->
+    <div class="row justify-content-evenly">
+      <input (click)="signOut()" class="btn btn-secondary col-4" value="Salir">
+      <input (click)="sendSurvey()" type="submit" class="btn btn-primary col-4" value="Enviar y Salir">
+    </div>
+  </form>
+</div>
+
+<ng-template #patError>
+  <span>
+    Formato incorrecto.
+  </span>
+</ng-template>
+<ng-template #minError>
+  <span>
+    La información ingresada es muy corta.
+  </span>
+</ng-template>
+<ng-template #maxError>
+  <span>
+    La información ingresada es muy larga.
+  </span>
+</ng-template>

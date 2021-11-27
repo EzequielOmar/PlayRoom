@@ -10,15 +10,28 @@
     <nav class="nav nav-masthead justify-content-center">
       <a class="nav-link active" [routerLink]="[{ outlets: { menuList:['lobby']} }]">Lobby</a>
       <a class="nav-link" [routerLink]="[{ outlets: { menuList:['about']} }]">¿Quién Soy?</a>
-      <a class="nav-link" (click)="signOut()">
+      <a *ngIf="user?.data?.type===1" class="nav-link" [routerLink]="[{ outlets: { menuList:['data']} }]">Datos</a>
+      <a class="nav-link" (click)="openSurveyModal(encuesta)">
         <mat-icon data-toggle="tooltip" data-placement="left" title="Salir" aria-hidden="false"
           aria-label="logout icon">logout</mat-icon>
       </a>
       <a class="nav-link">
         <mat-icon aria-hidden="false" aria-label="account icon" data-toggle="tooltip" data-placement="left"
-          title="{{user?.displayName??user?.email??'anónimo'}}">account_circle</mat-icon>
+          title="{{user?.data?.username??user?.data?.email??'anonymous'}}">account_circle</mat-icon>
       </a>
     </nav>
 
   </div>
 </header>
+
+<ng-template #encuesta let-modal>
+  <div class="modal-header">
+    <button type="button" class="close" aria-label="Close" data-toggle="tooltip" data-placement="left" title="Cancelar"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" id="modal-basic-title">¿Se va tan pronto?</h4>
+    <p>Ayúdenos a mejorar completando esta encuesta</p>
+  </div>
+  <app-survey [uid]="user?.uid" (signOutRequest)="signOut()"></app-survey>
+</ng-template>

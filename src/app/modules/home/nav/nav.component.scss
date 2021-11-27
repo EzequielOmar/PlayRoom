@@ -80,3 +80,22 @@ a:hover {
 mat-icon {
   color: #fff;
 }
+
+//modal header
+.modal-header {
+  button {
+    float: right;
+    background: none;
+    border-radius: 9px;
+  }
+  span,
+  h4,
+  p {
+    color: black;
+  }
+  h4 {
+    width: 100%;
+    font-size: large;
+  }
+  display: block;
+}

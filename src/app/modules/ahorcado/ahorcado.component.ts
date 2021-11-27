@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   trigger,
   state,
@@ -10,9 +10,6 @@ import { AhorcadoService } from './ahorcado.service';
 import { TimerComponent } from '../shared/timer/timer.component';
 import { multiplyWordLengthBy, timeAhorcado } from './constants';
 import { ScoreComponent } from '../shared/score/score.component';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { ScoreService } from 'src/app/services/score/score.service';
-import { DbService } from 'src/app/services/db/db.service';
 
 @Component({
   selector: 'app-ahorcado',
@@ -101,7 +98,7 @@ import { DbService } from 'src/app/services/db/db.service';
     ]),
   ],
 })
-export class AhorcadoComponent implements OnInit, OnDestroy {
+export class AhorcadoComponent implements OnInit {
   gamename: string = 'ahorcado';
   @ViewChild(TimerComponent) countDown: TimerComponent = new TimerComponent();
   @ViewChild(ScoreComponent) score!: ScoreComponent;
@@ -217,9 +214,5 @@ export class AhorcadoComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.animation = false;
     }, 1000);
-  }
-
-  ngOnDestroy() {
-    this.countDown.ngOnDestroy();
   }
 }

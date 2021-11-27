@@ -18,4 +18,7 @@ export class UserService {
       .getDocOnce(databases.users, uid)
       .then(() => true)
       .catch(() => false);
+
+  getUser = async (uid: string) =>
+    await this.db.getDocOnce(databases.users, uid).then((u) => u);
 }

@@ -9,14 +9,15 @@ import { AboutMeComponent } from './about-me/about-me.component';
 import { HomeComponent } from './home.component';
 import { LobbyComponent } from './lobby/lobby.component';
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+const redirectUnauthorizedToLogin = () =>
+  redirectUnauthorizedTo(['/auth/login']);
 
 const routes: Routes = [
   {
     path: 'lobby',
     component: HomeComponent,
-   // canActivate: [AngularFireAuthGuard],
-   // data: { authGuardPipe: redirectUnauthorizedToLogin },
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
     children: [
       {
         path: '',
@@ -28,6 +29,7 @@ const routes: Routes = [
         component: AboutMeComponent,
         outlet: 'menuList',
       },
+
       {
         path: 'home',
         redirectTo: 'lobby',
@@ -66,7 +68,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: '**',
+    path: '',
     redirectTo: '/home/lobby',
     pathMatch: 'full',
   },

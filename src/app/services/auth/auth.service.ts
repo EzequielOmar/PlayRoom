@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { events } from 'src/app/interfaces/log.interface';
-import { UserData } from 'src/app/interfaces/user.interface';
+import { UserData, UserProfileType } from 'src/app/interfaces/user.interface';
 import { LogService } from '../log/log.service';
 import { UserService } from '../user/user.service';
 import { Validator } from './Validators';
@@ -203,8 +203,10 @@ export class AuthService {
     return {
       email: email,
       username: username,
+      type: UserProfileType.user,
       createdAt: new Date().toLocaleString(),
       lastModifAt: '',
+      deletedAt: '',
     };
   }
 }
