@@ -149,8 +149,6 @@ export class DbService {
    * @returns un Observable a la coleccion solicitada
    */
   getObserverDb(database: string) {
-    return this.db.collection(database).valueChanges();
+    return this.db.firestore.collection(database);
   }
-
-
 }

@@ -1,0 +1,34 @@
+//ranking
+ul {
+  border-radius: 100px 25px 100px 25px/ 5px 15px 5px 15px;
+  border: 3px double #b6fffcc9;
+  cursor: pointer;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: 0.25rem;
+  list-style: none;
+}
+li {
+  h3 {
+    margin: 0;
+  }
+  div {
+    text-align: center;
+  }
+  text-align: center;
+  width: 100%;
+}
+li:first-child {
+  border-bottom: #000000ba;
+  border-bottom-style: double;
+  border-bottom-width: thick;
+}
+li ~ li {
+  border-bottom: 1px solid #000000ba;
+}
+
+.bg-violet{
+  background: #281616ab;
+}

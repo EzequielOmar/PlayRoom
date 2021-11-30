@@ -12,6 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SurveyComponent } from './survey/survey.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataComponent } from './data/data.component';
+import { UidNamePipePipe } from '../../pipes/uid-name-pipe.pipe';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -20,6 +22,7 @@ import { DataComponent } from './data/data.component';
     MaterialModule,
     ReactiveFormsModule,
     NgbModule,
+    ChartsModule,
   ],
   declarations: [
     HomeComponent,
@@ -28,6 +31,7 @@ import { DataComponent } from './data/data.component';
     NavComponent,
     SurveyComponent,
     DataComponent,
+    UidNamePipePipe,
   ],
   exports: [],
 })

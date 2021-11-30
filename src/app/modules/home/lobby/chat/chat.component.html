@@ -2,18 +2,18 @@
 
   <div class="messages" #scroll>
     <div *ngFor="let message of messages" [class.other]="user?.uid !== message.data.uid"
-      [class.me]="user?.uid === message.data.uid" class="d-flex p-3 chat">
-      <span class="username">{{message.data.username}}</span>
-      {{message.data.uid}}
-      <div class="message ml-2 p-3">{{message.data.message}}</div>
+      [class.me]="user?.uid === message.data.uid" class="d-flex px-3 py-1 chat">
+      <span class="username text-capitalize">{{message.data.username}}</span>
       <!--
-      <span class="datetime">{{message.data.datetime}}</span>
-    -->
+        {{message.data.uid}}
+      -->
+      <div class="message px-3 py-1"><span>{{message.data.message}}</span></div>
+      <span class="datetime">{{message.data.date}} {{message.data.time}}</span>
     </div>
   </div>
-
+  <!--Usuario no logueado-->
   <span *ngIf="error">**{{error}}**</span>
-
+  <!--enviar-->
   <div class="form-group px-3">
     <input type="text" class="form-control" placeholder="Mensaje..." #input (keyup.enter)="send(input.value)">
     <mat-icon (click)="send(input.value)" aria-hidden="false" aria-label="logout icon">send</mat-icon>

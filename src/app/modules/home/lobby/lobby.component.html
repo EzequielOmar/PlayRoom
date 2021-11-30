@@ -1,1 +1,70 @@
-<app-chat></app-chat>
+<div class="container">
+  <div class="row pt-5">
+    <!--Ranking Top 5-->
+    <div class="col-md-4">
+      <ul class="p-0 bg-violet">
+        <li class="py-1">
+          <h3>Top Five MVP's</h3>
+        </li>
+        <li class="py-1" *ngFor="let r of ranking?.slice(0,5); let i=index">
+          <div class="col-12">
+            <strong> {{i+1}}º </strong>
+            <span class="text-success">+ {{r.scores.total}}</span>
+            <svg class="mx-2 mb-1" *ngIf="i+1 === 1" fill="orange" width="1rem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+              <path
+                d="M528 448H112c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h416c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm64-320c-26.5 0-48 21.5-48 48 0 7.1 1.6 13.7 4.4 19.8L476 239.2c-15.4 9.2-35.3 4-44.2-11.6L350.3 85C361 76.2 368 63 368 48c0-26.5-21.5-48-48-48s-48 21.5-48 48c0 15 7 28.2 17.7 37l-81.5 142.6c-8.9 15.6-28.9 20.8-44.2 11.6l-72.3-43.4c2.7-6 4.4-12.7 4.4-19.8 0-26.5-21.5-48-48-48S0 149.5 0 176s21.5 48 48 48c2.6 0 5.2-.4 7.7-.8L128 416h384l72.3-192.8c2.5.4 5.1.8 7.7.8 26.5 0 48-21.5 48-48s-21.5-48-48-48z" />
+            </svg>
+          </div>
+          <div class="col-12">
+            <span class="text-capitalize text-warning px-1"> {{r.uid | uidNamePipe |
+              async}}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-4">
+      <!-- Puntajes por juego de usuario-->
+      <ul class="p-0 bg-violet">
+        <li class="py-1">
+          <h3>Your Scores</h3>
+        </li>
+        <li class="py-1">
+          <span class="text-warning"> Ahorcado:</span> <span class="text-success px-1">+
+            {{userScore?.scores?.ahorcado}}</span>
+        </li>
+        <li class="py-1">
+          <span class="text-warning">Mayor o Menor:</span> <span class="text-success px-1">+
+            {{userScore?.scores?.mayoromenor}}</span>
+        </li>
+        <li class="py-1">
+          <span class="text-warning"> Preguntados:</span> <span class="text-success px-1">+
+            {{userScore?.scores?.preguntados}}</span>
+        </li>
+        <li class="py-1">
+          <span class="text-warning"> Sopa de Letras:</span> <span class="text-success px-1">+
+            {{userScore?.scores?.sopadeletras}}</span>
+        </li>
+      </ul>
+      <!--Ranking del usuario-->
+      <div class="card border border-white p-1 mt-5 bg-violet">
+        <div *ngIf="rank ===1" class="text-center">
+          <h4 class="m-0">Long live the king!</h4>
+          <svg fill="orange" width="2rem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path
+              d="M528 448H112c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h416c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm64-320c-26.5 0-48 21.5-48 48 0 7.1 1.6 13.7 4.4 19.8L476 239.2c-15.4 9.2-35.3 4-44.2-11.6L350.3 85C361 76.2 368 63 368 48c0-26.5-21.5-48-48-48s-48 21.5-48 48c0 15 7 28.2 17.7 37l-81.5 142.6c-8.9 15.6-28.9 20.8-44.2 11.6l-72.3-43.4c2.7-6 4.4-12.7 4.4-19.8 0-26.5-21.5-48-48-48S0 149.5 0 176s21.5 48 48 48c2.6 0 5.2-.4 7.7-.8L128 416h384l72.3-192.8c2.5.4 5.1.8 7.7.8 26.5 0 48-21.5 48-48s-21.5-48-48-48z" />
+          </svg>
+        </div>
+        <div class="text-center">
+          <h3 class="m-0 text-warning">Pos. {{rank}}º</h3>
+          <span>of {{ranking.length}} players</span>
+          <br>
+          <strong class="text-success mt-2">Total Score: + {{userScore.scores.total}}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 text-center">
+      <h3>Lobby Chat</h3>
+      <app-chat></app-chat>
+    </div>
+  </div>
+</div>

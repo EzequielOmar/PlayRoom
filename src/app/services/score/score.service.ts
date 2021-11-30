@@ -15,4 +15,8 @@ export class ScoreService {
 
   getScore = async (uid: string) =>
     await this.db.getDocOnce(databases.score, uid);
+
+  getRanking() {
+    return this.db.getObserverDb(databases.score).orderBy('total','desc');
+  }
 }

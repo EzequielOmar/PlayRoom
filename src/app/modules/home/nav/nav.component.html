@@ -3,16 +3,16 @@
     <a (click)="toggleMenu()">
       <mat-icon #menuIcon aria-hidden="false" aria-label="menu icon">expand_more</mat-icon>
     </a>
-    <h3 class="masthead-brand">Sala de Juegos</h3>
+    <h3 class="masthead-brand">Play Room</h3>
     <nav class="nav nav-masthead justify-content-center">
       <a [class.active]="getUrl().endsWith('lobby')" class="nav-link"
         [routerLink]="[{ outlets: { menuList:['lobby']} }]">Lobby</a>
       <a [class.active]="getUrl().includes('about')" class="nav-link"
-        [routerLink]="[{ outlets: { menuList:['about']} }]">¿Quién Soy?</a>
+        [routerLink]="[{ outlets: { menuList:['about']} }]">¿Who am i?</a>
       <a [class.active]="getUrl().includes('data')" *ngIf="user?.data?.type===1" class="nav-link"
-        [routerLink]="[{ outlets: { menuList:['data']} }]">Datos</a>
+        [routerLink]="[{ outlets: { menuList:['data']} }]">Data</a>
       <a class="nav-link" (click)="openSurveyModal(encuesta)">
-        <mat-icon data-toggle="tooltip" data-placement="left" title="Salir" aria-hidden="false"
+        <mat-icon data-toggle="tooltip" data-placement="left" title="Go Out" aria-hidden="false"
           aria-label="logout icon">logout</mat-icon>
       </a>
       <a class="nav-link">
@@ -25,7 +25,7 @@
 
 <ng-template #encuesta let-modal>
   <div class="modal-header">
-    <button type="button" class="close" aria-label="Close" data-toggle="tooltip" data-placement="left" title="Cancelar"
+    <button type="button" class="close" aria-label="Close" data-toggle="tooltip" data-placement="left" title="Cancel"
       (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>

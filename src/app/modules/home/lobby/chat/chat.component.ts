@@ -15,23 +15,13 @@ export class ChatComponent implements OnInit {
   user: firebase.User | null;
   messages: Message[] = [];
   error: string = '';
+
   constructor(private chatDb: ChatService, private auth: AuthService) {
     this.user = this.auth.currentUser;
   }
 
   ngOnInit(): void {
-    //limpia el array de mensaje y obtiene los ultimos 50
-    //cada vez que se carga un mensaje nuevo
-    //por ultimo scrollea el div
-    this.chatDb.getMessages().onSnapshot((snap) => {
-      this.messages = [];
-      snap.forEach((child: any) => {
-        this.messages.push({ id: child.id, data: child.data() });
-      });
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 500);
-    });
+    this.refreshMessages();
   }
 
   send(input: string) {
@@ -48,6 +38,23 @@ export class ChatComponent implements OnInit {
       username: this.user.displayName ?? '',
     };
     this.chatDb.newMessage(message);
+  }
+
+  /**
+   * limpia el array de mensaje y obtiene los ultimos 50
+   * cada vez que se carga un mensaje nuevo
+   * por ultimo scrollea el div
+   */
+  private refreshMessages() {
+    this.chatDb.getMessages().onSnapshot((snap) => {
+      this.messages = [];
+      snap.forEach((child: any) => {
+        this.messages.push({ id: child.id, data: child.data() });
+      });
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 500);
+    });
   }
 
   private scrollToBottom(): void {

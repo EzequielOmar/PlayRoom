@@ -5,58 +5,84 @@
     .chat {
       .username {
         width: 100%;
+        font-size: 0.9rem;
       }
       .message {
         border: none;
-        background: #26c545;
-        font-size: 10px;
-        border-radius: 20px;
+        background: #92cfd152;
+        font-size: 1rem;
+        border-radius: 10px;
       }
       .datetime {
         width: 100%;
+        font-size: 0.8rem;
       }
       flex-wrap: wrap;
       display: flex;
     }
     .other {
+      .message {
+        margin-right: 2rem;
+      }
       text-align: start;
     }
     .me {
+      .message {
+        margin-left: 2rem;
+      }
       justify-content: end;
       text-align: end;
     }
     overflow-y: scroll;
     height: 400px;
   }
+
+  /* Scroll Bar */
   .messages::-webkit-scrollbar {
+    width: 10px;
+  }
+  .messages::-webkit-scrollbar-track {
     display: none;
   }
+  .messages::-webkit-scrollbar-thumb {
+    background: #774a78;
+    border-radius: 10px;
+  }
+  .messages::-webkit-scrollbar-thumb:hover {
+    background: darken($color: #774a78, $amount: 5);
+  }
+
   .form-group {
     .form-control {
       border-radius: 12px;
       border: 1px solid #f0f0f0;
       font-size: 8px;
-      font-weight: 300;
-      font-size: .8rem;
+      font-size: 0.8rem;
+      border: 1px solid #774a78;
     }
     .form-control:focus {
       box-shadow: none;
     }
     .form-control::placeholder {
-      font-size: 8px;
+      font-size: 12px;
       color: #c4c4c4;
     }
     mat-icon {
       color: rgb(146, 207, 209);
       position: absolute;
-      bottom: .8rem;
+      bottom: 0.8rem;
       right: 1.2rem;
+    }
+    mat-icon:hover {
+      color: darken($color: rgb(146, 207, 209), $amount: 5);
     }
     margin-bottom: 0.5rem;
   }
-  background: red;
+  border: 1px solid #774a78;
+  background: #8260a070;
+  font-weight: 400;
+  font-weight: 400;
   width: 300px;
-  border: none;
   border-radius: 15px;
   overflow: hidden;
 }
